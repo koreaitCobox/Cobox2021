@@ -192,7 +192,8 @@ var genre=[];//선택한 장르사이즈를 담는 배열
 			 <input type="text" name="director" placeholder="감독">
 			 <input type="text" name="actor" placeholder="배우">
 			 <input type="text" name="release" placeholder="개봉일" id="datepicker1">
-			<textarea id="story" name="story" placeholder="영화 줄거리" style="height: 200px">줄거리</textarea>
+			 <h4>줄거리</h4>
+			<textarea id="story" name="story" placeholder="영화 줄거리" style="height: 200px"></textarea>
 
 			
 			<p>

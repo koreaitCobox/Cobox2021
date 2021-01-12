@@ -2,12 +2,36 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%
 Movie movie=(Movie)request.getAttribute("movie"); 
-
-
 %>
 <!DOCTYPE html>
 <html>
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="http://cdn.ckeditor.com/4.15.1/standard/ckeditor.js"></script>
+<script>
+$(function(){
+	
+	
+	$($("input[type='button']")[0]).click(function(){
+		regist();
+	});
+		
+});
+//글등록 요청
+function regist(){
+	$("form").attr({
+		action:"/client/comments/regist"
+		method:"post"
+	});
+	$("form").submit();
+}
+
+
+
+</script>
+
+
 <%@ include file="../inc/header.jsp"%>
 </head>
 <body class="single-cin">
@@ -58,17 +82,16 @@ Movie movie=(Movie)request.getAttribute("movie");
 
 					<p class="movie__describe">영화 상세내용 올곳(json??)</p>
 				</div>
+				
 				<div class="clearfix"></div>
 				<h2 class="page-heading">영화 후기 (15)</h2>
 
 				<div class="comment-wrapper">
 					<form id="comment-form" class="comment-form" method='post'>
 						<textarea class="comment-form__text"
-							placeholder='Add you comment here'></textarea>
+							placeholder='후기를 작성하세요' name="content" id="content"></textarea>
 						<label class="comment-form__info">250 characters left</label>
-						<button type='submit'
-							class="btn btn-md btn--danger comment-form__btn">add
-							comment</button>
+						<input type="button" class="btn btn-md btn--danger comment-form__btn" value="댓글등록">
 					</form>
 
 					<div class="comment-sets">
@@ -79,24 +102,13 @@ Movie movie=(Movie)request.getAttribute("movie");
 							</div>
 
 							<a href='#' class="comment__author"><span
-								class="social-used fa fa-facebook"></span>Roberta Inetti</a>
+								class="social-used fa fa-facebook" name="member_id"></span>Roberta Inetti</a>
 							<p class="comment__date">today | 03:04</p>
-							<p class="comment__message">아주 재밌어요</p>
+							<p class="comment__message" name="msg">아주 재밌어요</p>
 							<a href='#' class="comment__reply">Reply</a>
 						</div>
 
-						<div class="comment">
-							<div class="comment__images">
-								<img alt='' src="/resources/images/comment/avatar-olia.jpg">
-							</div>
-
-							<a href='#' class="comment__author"><span
-								class="social-used fa fa-vk"></span>Olia Gozha</a>
-							<p class="comment__date">22.10.2013 | 14:40</p>
-							<p class="comment__message">짱짱 울었어요</p>
-							<a href='#' class="comment__reply">Reply</a>
-						</div>
-
+					
 						<div class="comment comment--answer">
 							<div class="comment__images">
 								<img alt='' src="/resources/images/comment/avatar-dmitriy.jpg">
@@ -108,8 +120,8 @@ Movie movie=(Movie)request.getAttribute("movie");
 							<p class="comment__message">진짜여???</p>
 							<a href='#' class="comment__reply">Reply</a>
 						</div>
-
-				
+						
+						<div id="list-area"></div>
 
 						
 

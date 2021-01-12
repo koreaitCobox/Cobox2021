@@ -7,7 +7,7 @@
 		<typeAlias type="com.koreait.cobox.model.domain.Genre" alias="Genre" />
 		<typeAlias type="com.koreait.cobox.model.domain.Rating" alias="Rating" />
 		<typeAlias type="com.koreait.cobox.model.domain.Movie" alias="Movie" />
-		<typeAlias type="com.koreait.cobox.model.domain.Comments" alias="Comments" />
+		<typeAlias type="com.koreait.cobox.model.domain.Comments" alias="Comments"/>
 	</typeAliases>
 	<mappers>
 		<mapper resource="com/koreait/cobox/mybatis/mapper/GenreMapper.xml"/>

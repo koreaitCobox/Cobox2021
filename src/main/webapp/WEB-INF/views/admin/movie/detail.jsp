@@ -6,7 +6,7 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%
 Movie movie=(Movie)request.getAttribute("movie");
-out.print("요청객체에 담겨진 movie_id"+movie);
+out.print("요청객체에 담겨진 movie_id"+movie.getMovie_id());
 %>
 
 <!DOCTYPE html>

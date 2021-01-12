@@ -41,7 +41,7 @@
 	</insert>
 	
 	<update id="update" parameterType="Movie">
-		update movie set movie_name={#},rating_id={#rating_id},director={#director},actor={#actor},release={#release},story={#story},poster={#poster}
+		update movie set movie_name={#movie_name},rating_id={#rating_id},director={#director},actor={#actor},release={#release},story={#story},poster={#poster}
 		where movie_id=#{movie_id} 
 	</update>
 	
