@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Rating">
+
+<select id="selectAllById" resultType="Rating" parameterType="int">
+		select * from rating where movie_id=#{movie_id}
+</select>
+
+<insert id="insert" parameterType="Rating">
+	insert into rating(rating_id,movie_id,rating_name) values(seq_color.nextval,#{movie_id},#{movie_name})
+</insert>
+
+<!-- 한건 가져오기 -->
+
+<select id="select" parameterType="int" resultType="Rating">
+	select * from rating where rating_id={rating_id}
+</select>
+
+</mapper>
+

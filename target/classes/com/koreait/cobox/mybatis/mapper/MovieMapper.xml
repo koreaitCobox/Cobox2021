@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Movie">
+
+	<resultMap id="joinGenre" type="Movie" >
+		<id column="movie_id" property="movie_id"/>
+		<result column="movie_name" property="movie_name"/>
+		<result column="rating_id" property="rating_id"/>
+		<result column="director" property="director"/>
+		<result column="actor" property="actor"/>
+		<result column="release" property="release"/>
+		<result column="story" property="story"/>
+		<result column="poster" property="poster"/>
+		
+		<collection column="movie_id"
+				    property="genre"
+				    javaType="java.util.List"
+				    ofType="Genre"
+				    select="Genre.selectByMovie_id"/>
+				    
+				    
+	</resultMap>
+
+
+	<select id="selectAll" resultType="Movie">
+		select * from movie order by movie_id desc
+	</select>
+
+	<select id="selectById" parameterType="int" resultType="Movie">
+		select * from movie where movie_id=#{movie_id}
+	</select>
+
+
+	<insert id="insert" parameterType="Movie">
+		insert into movie(movie_id,movie_name,rating_id,director,actor,release,story,poster)
+		values(seq_movie.nextval,#{movie_name},#{rating_id},#{director},#{actor},#{release},#{story},#{poster})
+	
+		<selectKey order="AFTER" keyProperty="movie_id" resultType="int">
+			select seq_movie.currval as movie_id from dual
+		</selectKey>
+	</insert>
+	
+	<update id="update" parameterType="Movie">
+		update movie set movie_name={#},rating_id={#rating_id},director={#director},actor={#actor},release={#release},story={#story},poster={#poster}
+		where movie_id=#{movie_id} 
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		delete from movie where movie_id=#{movie_id}
+	</delete>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</mapper>

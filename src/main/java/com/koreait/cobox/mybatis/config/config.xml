@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.koreait.cobox.model.domain.Genre" alias="Genre" />
+		<typeAlias type="com.koreait.cobox.model.domain.Rating" alias="Rating" />
+		<typeAlias type="com.koreait.cobox.model.domain.Movie" alias="Movie" />
+		<typeAlias type="com.koreait.cobox.model.domain.Comments" alias="Comments" />
+	</typeAliases>
+	<mappers>
+		<mapper resource="com/koreait/cobox/mybatis/mapper/GenreMapper.xml"/>
+		<mapper resource="com/koreait/cobox/mybatis/mapper/RatingMapper.xml"/>
+		<mapper resource="com/koreait/cobox/mybatis/mapper/MovieMapper.xml"/>
+		<mapper resource="com/koreait/cobox/mybatis/mapper/CommentsMapper.xml"/>
+	</mappers>
+
+</configuration>
