@@ -9,4 +9,6 @@ public class Comments {
 	private int movie_id;
 	private String cdate;
 	private String msg;
+	
+	private Member member;
 }

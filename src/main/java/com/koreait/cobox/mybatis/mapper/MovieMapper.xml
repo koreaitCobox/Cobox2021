@@ -13,24 +13,58 @@
 		<result column="poster" property="poster"/>
 		
 		<collection column="movie_id"
-				    property="genre"
+				    property="genreList"
 				    javaType="java.util.List"
 				    ofType="Genre"
 				    select="Genre.selectByMovie_id"/>
 				    
 				    
 	</resultMap>
-
-
-	<select id="selectAll" resultType="Movie">
+	
+	<resultMap id="joinRating" type="Movie">
+		<id column="movie_id" property="movie_id"/>
+		<result column="movie_name" property="movie_name"/>
+		<result column="rating_id" property="rating_id"/>
+		<result column="director" property="director"/>
+		<result column="actor" property="actor"/>
+		<result column="release" property="release"/>
+		<result column="story" property="story"/>
+		<result column="poster" property="poster"/>
+		
+		<association column="rating_id"
+					property="rating"
+					javaType="Rating"
+					select="Rating.selectAllById"/>
+					
+		<collection column="movie_id"
+				    property="genreList"
+				    javaType="java.util.List"
+				    ofType="Genre"
+				    select="Genre.selectByMovie_id"/>
+	
+	</resultMap>
+	
+	<!-- 등급연령 전체 가져오기 -->
+	<select id="selectRatingName" resultMap="joinRating">
 		select * from movie order by movie_id desc
 	</select>
-
-	<select id="selectById" parameterType="int" resultType="Movie">
+	
+	<!--장르 한건 가져오기 -->
+	<select id="select" resultMap="joinGenre">
 		select * from movie where movie_id=#{movie_id}
 	</select>
 
+	<!-- 영화 전체 가져오기 -->
+	<select id="selectAll" resultType="Movie">
+		select * from movie order by movie_id desc
+	</select>
+	
+	<!--영화 한건 가져오기  -->
+	<select id="selectById" parameterType="int" resultMap="joinRating">
+		select * from movie where movie_id=#{movie_id}
+	</select>
 
+	<!-- 영화정보 입력 -->
 	<insert id="insert" parameterType="Movie">
 		insert into movie(movie_id,movie_name,rating_id,director,actor,release,story,poster)
 		values(seq_movie.nextval,#{movie_name},#{rating_id},#{director},#{actor},#{release},#{story},#{poster})
@@ -40,31 +74,20 @@
 		</selectKey>
 	</insert>
 	
+	<!-- 영화정보 수정 -->
 	<update id="update" parameterType="Movie">
-		update movie set movie_name={#movie_name},rating_id={#rating_id},director={#director},actor={#actor},release={#release},story={#story},poster={#poster}
-		where movie_id=#{movie_id} 
+		update movie set movie_name=#{movie_name},
+		rating_id=#{rating_id},director=#{director},
+		actor=#{actor},release=#{release},story=#{story},
+		poster=#{poster} where movie_id=#{movie_id} 
 	</update>
-	
+	<!-- 영화정보 삭제 -->
 	<delete id="delete" parameterType="int">
 		delete from movie where movie_id=#{movie_id}
 	</delete>
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	<!--  -->
 	
 	
 </mapper>

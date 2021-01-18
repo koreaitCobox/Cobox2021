@@ -7,6 +7,8 @@
 <%
 Movie movie=(Movie)request.getAttribute("movie");
 out.print("요청객체에 담겨진 movie_id"+movie.getMovie_id());
+List <Genre>genreList=(List)movie.getGenreList();
+out.print("장르"+genreList);
 %>
 
 <!DOCTYPE html>
@@ -78,15 +80,18 @@ var genre=[];//선택한 장르사이즈를 담는 배열
 		
 		$($("input[type='button']")[1]).click(function(){
 			del();
+		
 		});
 		
 		//글수정 요청
 		function edit(){
+			if(confirm("수정하시겠어요?")){
 			$("form").attr({
 				action:"/admin/movie/edit",
 				method:"post"
 			});
 			$("form").submit();
+		}
 		}
 		//글삭제 요청
 		function del(){
@@ -111,10 +116,12 @@ var genre=[];//선택한 장르사이즈를 담는 배열
 			
 			for (var i = 0; i < len; i++) {
 				//만일 체크가 되어있다면, 기존 배열을 모두 지우고, 체크된 체크박스 값만 배열에 넣자!!
-				if ($($(ch)[i]).is(":checked")) {
+				if (!$($(ch)[i]).is(":checked")) {
 					genre.push($($(ch)[i]).val());
+					ch[i].val()
+					
 				}
-				//console.log(i,"번째 체크박스 상태는 ", $($(ch)[i]).is(":checked"));
+				console.log(i,"번째 체크박스 상태는 ", $($(ch)[i]).is(":checked"));
 				console.log("채우고 genre의 길이는",genre.length);
 			}
 			console.log("서버에 전송할 사이즈 배열의 구성은 ", genre);
@@ -141,9 +148,10 @@ var genre=[];//선택한 장르사이즈를 담는 배열
 <body>
 	<%@ include file="../inc/main_navi.jsp"%>
 
-	<h3>영화 등록</h3>
+	<h3>영화 수정</h3>
 	<div class="container">
 		<form>
+			
 			<h4>장르선택(복수 가능)</h4>
 			<input type="checkbox" id="genre_name" name="genre_name" value="hrror" />hrror
 			<input type="checkbox" id="genre_name" name="genre_name" value="drama" />drama
@@ -169,7 +177,7 @@ var genre=[];//선택한 장르사이즈를 담는 배열
 			<input type="checkbox" id="genre_name" name="genre_name" value="history" />history
 			<input type="checkbox" id="genre_name" name="genre_name" value="war" />war
 			
-
+ 			<input type="text" name="movie_id" value="<%=movie.getMovie_id()%>">
 			<input type="text" name="movie_name" placeholder="영화명" value="<%=movie.getMovie_name()%>"> 
 
 			<select name="rating_id">		
@@ -180,7 +188,7 @@ var genre=[];//선택한 장르사이즈를 담는 배열
 				<option value="4">adult</option>
 			</select>
 			
-		
+			
 			 <input type="text" name="director" value="<%=movie.getDirector()%>">
 			 <input type="text" name="actor" value="<%=movie.getActor()%>">
 			 <input type="text" name="release" id="datepicker1" value="<%=movie.getRelease()%>">
@@ -191,7 +199,7 @@ var genre=[];//선택한 장르사이즈를 담는 배열
 			</p>
 
 			<input type="button" value="글수정">
-			<input type="button" value="글삭제">
+			<input type="button" value="글삭제" >
 			<input type="button" value="목록보기" onClick="location.href='/admin/movie/list'">
 			
 		</form>

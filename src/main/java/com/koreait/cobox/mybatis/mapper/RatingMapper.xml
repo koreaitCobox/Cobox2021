@@ -3,18 +3,24 @@
 <mapper namespace="Rating">
 
 <select id="selectAllById" resultType="Rating" parameterType="int">
-		select * from rating where movie_id=#{movie_id}
+		select * from rating where rating_id=#{rating_id}
 </select>
 
 <insert id="insert" parameterType="Rating">
 	insert into rating(rating_id,movie_id,rating_name) values(seq_color.nextval,#{movie_id},#{movie_name})
 </insert>
 
-<!-- 한건 가져오기 -->
+<!-- id에 맞는 rating 한건 가져오기 -->
 
-<select id="select" parameterType="int" resultType="Rating">
-	select * from rating where rating_id={rating_id}
-</select>
+<!-- <select id="selectByRatingId" parameterType="int" resultType="Rating">
+	select rating_name from rating where rating_id={rating_id}
+</select> -->
 
+
+
+<!--관람등급 movie_id에 따른 한건 가져오기 --> 
+<!-- <select id="selectByMovie_id" resultType="Rating" parameterType="int">
+	select * from rating where movie_id=#{movie_id} 
+</select>  -->
 </mapper>
 

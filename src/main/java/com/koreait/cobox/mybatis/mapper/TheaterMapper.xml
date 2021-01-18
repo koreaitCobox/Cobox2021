@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Theater">
+<select id="selectAllById" resultType="Theater" parameterType="int">
+	select * from theater where location_id=#{location_id}
+</select> 
+
+
+
+</mapper>

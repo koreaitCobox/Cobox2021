@@ -24,4 +24,8 @@
 	update genre set genre_name=#{genre_name}
 	where movie_id=#{movie_id}
 </update>
+<!--장르에 맞는 무비아이디 가져오기  -->
+<select id="selectByGenre" resultType="Genre">
+	select movie_id from genre where genre_name=#{genre_name}
+</select>
 </mapper>

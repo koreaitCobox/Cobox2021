@@ -7,5 +7,6 @@ import com.koreait.cobox.model.domain.Comments;
 public interface CommentsDAO {
 	public List selectAll(int movie_id);
 	public int insert(Comments comments);
-	public int delete(int comments_id);
+	public int delete(int movie_id);
+	
 }

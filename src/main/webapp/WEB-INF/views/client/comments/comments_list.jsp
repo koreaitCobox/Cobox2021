@@ -2,26 +2,28 @@
 <%@page import="java.util.List"%>
 <%@ page contentType="text/json; charset=UTF-8"%>
 <%
-	List<Comments> commentsList =(List)request.getAttribute("commentsList");
-	StringBuilder sb = new StringBuilder();
+List<Comments>commentsList =(List)request.getAttribute("commentsList");
+
+out.print(commentsList);
+	StringBuilder sb=new StringBuilder();
 	sb.append("{");
-	sb.append("\"list\":[");
+	sb.append("\"list\"[");
 	for(int i=0;i<commentsList.size();i++){
-		Comments comments=commentsList.get(i);
-		
-		sb.append("{");
-		sb.append("\"msg\":\""+comments.getMsg()+"\",");
-		sb.append("\"member_id\":\""+comments.getMember_id()+"\",");
-		sb.append("\"regist\":\""+comments.getCdate().substring(0,10)+"\"");
+		Comments comments = commentsList.get(i);
+	sb.append("{");
+	sb.append("\"msg\":\"ddd\",");
+	sb.append("\"author\":\"batman\",");
+	sb.append("\"cdate\":\"2020-12-25\"");
 	if(i<commentsList.size()-1){
-		sb.append("},");	
+	sb.append("},");
 	}else{
-		sb.append("}");
+	sb.append("}");
 	}
 	}
-	sb.append("]");	
-	sb.append("}");	
-	out.print(sb.toString());
-
-
+	sb.append("]");
+	sb.append("}");
+	out.print(sb.toString()); 
+	out.print("됬다");
+	
 %>
+

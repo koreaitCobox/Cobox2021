@@ -21,15 +21,22 @@ public class Movie {
 	//이미지 처리
 	private MultipartFile repImg;
 	
-	//insert에 써먹을것
+	
+	//insert 
 	private Genre[] genre;
-	private String rating;
+	//private String rating;
 	
+	//rating 의 name값가져오기
+	private Rating rating;
 	
-	//조인에 써먹을것
+	//조인
 	private List<Genre> genreList;
+	//private List<Comments> commentsList;
 	
+	//영화 한건을 가지고 왔을때 한건에 맞는 코멘트리스트를 가지고온다//
+	//인서트 : 세션에 멤버아이디가 담겨져있으면 등록-> 멤버테이블에서 멤버 아이디에 맞는 mid를 가져온다
 	
+
 	
 	
 	

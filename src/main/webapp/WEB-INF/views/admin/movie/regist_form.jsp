@@ -90,9 +90,9 @@ var genre=[];//선택한 장르사이즈를 담는 배열
 			}
 			console.log("서버에 전송할 사이즈 배열의 구성은 ", genre);
 		});
-		
-		
 	});
+		
+	
 	
 	//달력생성
 	$(function() {
@@ -102,7 +102,7 @@ var genre=[];//선택한 장르사이즈를 담는 배열
 	});
 	//장르 선택시 
 	
-	//상품 등록
+	//영화 등록
 	function regist(){
 		var formData=new FormData($("form")[0]);
 		//폼데이터에 에디터값 추가하기
@@ -128,17 +128,7 @@ var genre=[];//선택한 장르사이즈를 담는 배열
 				
 			}
 		});
-		
-	
-		/*동기방식 업로드
-		$("form").attr({
-			action:"/admin/movie/regist",
-			method:"post",
-			enctype:"multipart/form-data"
-			
-		});
-		$("form").submit();
-		*/
+
 	}
 	
 </script>

@@ -22,7 +22,7 @@ public class MybatisGenreDAO implements GenreDAO{
 
 	@Override
 	public List selectById(int movie_id) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
@@ -48,7 +48,15 @@ public class MybatisGenreDAO implements GenreDAO{
 
 	@Override
 	public void delete(int genre_id) throws DMLException{
-		// TODO Auto-generated method stub
+		int result=sqlSessionTemplate.delete("Genre.delete",genre_id);
+		if(result==0) {
+			throw new DMLException("장르 삭제에 삭제했습니다");
+		}
+	}
+
+	@Override
+	public List selectByGenre(String genre_name) {
+		return sqlSessionTemplate.selectList("Genre.selectByGenre",genre_name);
 		
 	}
 	

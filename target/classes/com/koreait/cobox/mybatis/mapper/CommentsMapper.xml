@@ -2,18 +2,45 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Comments">
 
-<select id="selectAll" resultType="Comments" parameterType="int">
+<resultMap id="joinMember" type="Comments">
+	<id column="comments_id" property="comments_id"/>
+	<result column="movie_id" property="movie_id"/>
+	<result column="cdate" property="cdate"/>
+	<result column="msg" property="msg"/>
+	
+	<association 
+	column="member_id"
+	property="member"
+	javaType="Member"
+	select="Member.selectById"/>
+	
+</resultMap>
+ 
+
+<select id="selectAll" resultMap="joinMember" parameterType="int">
 	select * from comments where movie_id=#{movie_id} 
 	order by comments_id desc
 </select>
 
 <insert id="insert" parameterType="Comments">
-	insert into comments(member_id,movie_id,cdate,msg)
-	values(#{member_id},#{movie_id},#{cdate},#{msg})
+	insert into comments(comments_id,member_id,movie_id,msg)
+	values(seq_comments.nextval,#{member_id},#{movie_id},#{msg})
 </insert>
 
-<delete id="delete" parameterType="int">
+<!-- <delete id="delete" parameterType="int">
 	delete from comments where comments_id=#{comments_id}
+</delete> -->
+
+
+
+<delete id="delete" parameterType="int">
+delete from comments where movie_id=#{movie_id}
 </delete>
 
+
+
+
+
+
 </mapper>
+

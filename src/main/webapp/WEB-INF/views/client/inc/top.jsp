@@ -1,15 +1,15 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <!-- Banner -->
-<div class="banner-top">
+<!-- <div class="banner-top">
     <img alt='top banner' src="/resources/images/banners/bra.jpg">
-</div>
+</div> -->
 
 <!-- Header section -->
 <header class="header-wrapper">
     <div class="container">
         <!-- Logo link-->
         <a href='/' class="logo">
-            <img alt='logo' src="/resources/images/logo.png">
+            <img alt='logo' src="/resources/images/cobox1.jpeg">
         </a>
         
         <!-- Main website navigation-->
@@ -46,8 +46,15 @@
         
         <!-- Additional header buttons / Auth and direct link to booking-->
         <div class="control-panel">
-            <a href="#" class="btn btn--sign login-window">Sign in</a>
-            <a href="#" class="btn btn-md btn--warning btn--book login-window">Book a ticket</a>
+        	<!-- <span class="btn btn--sign login-window"></span> -->
+        	
+        <% if(session.getAttribute("member")==null){%>
+            <a href="/client/member/formtable" >로그인</a>
+            <%}else{ %>
+            <a href="/client/member/formtable" >로그아웃</a>
+            <%} %>
+            <!-- <span class="btn btn-md btn--warning btn--book login-window"></span> -->
+            <a href="/client/member/join">회원가입</a>
         </div>
 
     </div>
