@@ -18,13 +18,23 @@
  
 
 <select id="selectAll" resultMap="joinMember" parameterType="int">
-	select * from comments where movie_id=#{movie_id} 
+	select * from comments
+	 where 
+	movie_id=#{movie_id} 
 	order by comments_id desc
 </select>
 
 <insert id="insert" parameterType="Comments">
-	insert into comments(comments_id,member_id,movie_id,msg)
-	values(seq_comments.nextval,#{member_id},#{movie_id},#{msg})
+	insert into comments(
+		member_id,
+		movie_id,
+		msg
+	)
+	values(
+		#{member_id},
+		#{movie_id},
+		#{msg}
+	)
 </insert>
 
 <!-- <delete id="delete" parameterType="int">

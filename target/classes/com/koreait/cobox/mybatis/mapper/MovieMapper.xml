@@ -2,92 +2,194 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Movie">
 
-	<resultMap id="joinGenre" type="Movie" >
+
+	<resultMap id="joinRatingGenre" type="Movie">
 		<id column="movie_id" property="movie_id"/>
 		<result column="movie_name" property="movie_name"/>
 		<result column="rating_id" property="rating_id"/>
 		<result column="director" property="director"/>
 		<result column="actor" property="actor"/>
-		<result column="release" property="release"/>
-		<result column="story" property="story"/>
-		<result column="poster" property="poster"/>
-		
-		<collection column="movie_id"
-				    property="genreList"
-				    javaType="java.util.List"
-				    ofType="Genre"
-				    select="Genre.selectByMovie_id"/>
-				    
-				    
-	</resultMap>
-	
-	<resultMap id="joinRating" type="Movie">
-		<id column="movie_id" property="movie_id"/>
-		<result column="movie_name" property="movie_name"/>
-		<result column="rating_id" property="rating_id"/>
-		<result column="director" property="director"/>
-		<result column="actor" property="actor"/>
-		<result column="release" property="release"/>
+		<result column="playdate" property="playdate"/>
 		<result column="story" property="story"/>
 		<result column="poster" property="poster"/>
 		
 		<association column="rating_id"
 					property="rating"
 					javaType="Rating"
-					select="Rating.selectAllById"/>
+					select="Rating.selectAllById"/> <!-- 조인으로 다른 테이블의 하나의 정보만 가져올 때  -->
 					
 		<collection column="movie_id"
 				    property="genreList"
 				    javaType="java.util.List"
-				    ofType="Genre"
-				    select="Genre.selectByMovie_id"/>
+				    ofType="GenreList"
+				    select="Genre.selectByMovie_id"/><!-- 조인으로 다른테이블의 여러정보를 가져올 때   -->
 	
 	</resultMap>
 	
-	<!-- 등급연령 전체 가져오기 -->
-	<select id="selectRatingName" resultMap="joinRating">
+	<!--  한개 가져오기 
+    <select id="selectRatingName" resultMap="joinRatingGenre">
 		select * from movie order by movie_id desc
+	</select>  
+	-->
+	<!--영화 한건 가져오기  -->
+	<select id="selectById" parameterType="int" resultMap="joinRatingGenre">
+		select * from movie where movie_id=#{movie_id}
 	</select>
 	
 	<!--장르 한건 가져오기 -->
-	<select id="select" resultMap="joinGenre">
+	<select id="select" resultMap="joinRatingGenre">
 		select * from movie where movie_id=#{movie_id}
-	</select>
-
-	<!-- 영화 전체 가져오기 -->
-	<select id="selectAll" resultType="Movie">
-		select * from movie order by movie_id desc
 	</select>
 	
-	<!--영화 한건 가져오기  -->
-	<select id="selectById" parameterType="int" resultMap="joinRating">
-		select * from movie where movie_id=#{movie_id}
+	
+	
+	<!-- 장르 모두 가져오기 -->
+	<select id="getGenreList" resultType="map">
+		select genre_name from cobox.genre
 	</select>
+	
+	<!-- main 영화 모두 가져오기 -->
+ 	<select id="selectAll1" resultMap="joinRatingGenre" resultType="Movie">
+		select * from cobox.movie
+	</select> 
+	
+	<!-- 영화 전체 가져오기 
+ 	 <select id="selectAll" parameterType="hashmap" resultMap="joinRatingGenre">
+		select * 
+		from cobox.movie
+			where 1=1
+		 <choose>
+			<when test="searchSelect=='title'">
+				<if test ="search != null and search != ''">  
+					and movie_name like  concat('%',#{search},'%')
+		 		</if>
+			</when>
+			<when test = "searchSelect=='actor'">
+				<if test ="search != null and search != ''">
+		 			and actor like concat('%',#{search},'%')
+				</if>
+			</when>
+			<otherwise>
+				<if test ="search != null and search != ''">
+					and movie_name like concat('%',#{search},'%')
+					or
+					actor like concat('%',#{search},'%')
+				</if> 
+			</otherwise> 
+		</choose>
+		order by movie_id desc
+	</select> --> 
+	
+<!-- 영화 전체 가져오기 -->
+ 	 <select id="selectAll" parameterType="hashmap" resultMap="joinRatingGenre">
+		select D.* from(
+			select row_number() over(order by cobox.movie.movie_id desc) as RNUM, C.* from(
+		select *
+		from cobox.movie
+			where 1=1
+		 <choose>
+			<when test="searchSelect=='title'">
+				<if test ="search != null and search != ''">  
+					and movie_name like  concat('%',#{search},'%')
+		 		</if>
+			</when>
+			<when test = "searchSelect=='actor'">
+				<if test ="search != null and search != ''">
+		 			and actor like concat('%',#{search},'%')
+				</if>
+			</when>
+			<otherwise>
+				<if test ="search != null and search != ''">
+					and movie_name like concat('%',#{search},'%')
+					or
+					actor like concat('%',#{search},'%')
+				</if> 
+			</otherwise> 
+		</choose>
+		order by cobox.movie.movie_id desc
+		) as C limit #{tot}
+		) as D where RNUM > ((#{page} - 1) * #{pageSize})
+
+	</select>   
+
+
+
 
 	<!-- 영화정보 입력 -->
 	<insert id="insert" parameterType="Movie">
-		insert into movie(movie_id,movie_name,rating_id,director,actor,release,story,poster)
-		values(seq_movie.nextval,#{movie_name},#{rating_id},#{director},#{actor},#{release},#{story},#{poster})
-	
+		insert into cobox.movie(
+			movie_name
+			,rating_id
+			,director
+			,actor
+			,playdate
+			,story
+			,poster
+		) 
+		values(
+			#{movie_name}
+			,#{rating_id}
+			,#{director}
+			,#{actor}
+			,#{playdate}
+			,#{story}
+			,#{poster}
+		)
 		<selectKey order="AFTER" keyProperty="movie_id" resultType="int">
-			select seq_movie.currval as movie_id from dual
+			select last_insert_id()
 		</selectKey>
 	</insert>
 	
-	<!-- 영화정보 수정 -->
+	<!--사진 업로드 없는 영화정보 수정 -->
 	<update id="update" parameterType="Movie">
-		update movie set movie_name=#{movie_name},
+		update movie 
+		set
+		movie_name=#{movie_name},
 		rating_id=#{rating_id},director=#{director},
-		actor=#{actor},release=#{release},story=#{story},
-		poster=#{poster} where movie_id=#{movie_id} 
+		actor=#{actor},release=#{release},story=#{story},poster=#{poster}
+		where movie_id=#{movie_id} 
 	</update>
+	
 	<!-- 영화정보 삭제 -->
 	<delete id="delete" parameterType="int">
-		delete from movie where movie_id=#{movie_id}
+		delete 
+			from
+		 	movie
+		 where
+		 	movie_id=#{movie_id}
 	</delete>
+	<!-- 체크한 영화정보 삭제 -->
+	<delete id ="movieCheckDelete" parameterType="hashMap">
+		delete 
+			from movie 
+			where movie_id in
+			<foreach collection="seqs" item="seq" index="index" open="(" close=")" separator=",">
+				#{seq}
+			</foreach>
+	</delete>
+
+	<!--박스명 , 가격 가져오기  -->
+	<select id="getBoxList" resultType="map">
+		select * from cobox.box
+	</select>
+	<!--박스번호에 맞는 박스 가격 가져오기  -->
+	<select id="getBoxPrice" parameterType="int" resultType="Box">
+		select box_price 
+			from cobox.box
+		where 
+			box_id=#{box_id}
+	</select>
 	
 	
-	<!--  -->
+	<!-- 영화 리스트 총 개수 가져오기  -->
+	<select id="selectMovieCount" resultType="int" parameterType="hashmap">
+		select 
+			count(*)
+		from 
+		cobox.movie
+	</select>
+	
+	
 	
 	
 </mapper>

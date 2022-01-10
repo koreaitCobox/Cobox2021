@@ -7,8 +7,10 @@ List<Movie> movieList=(List)request.getAttribute("movieList");
 
 <!doctype html>
 <html>
+<title>Cobox</title>
 <head>
 <%@ include file="client/inc/header.jsp"%>
+<!-- <script src="/resources/js/custom.js"></script> -->
 <script> 
 
 
@@ -51,11 +53,9 @@ List<Movie> movieList=(List)request.getAttribute("movieList");
    </div>
    <%@include file="client/inc/script.jsp"%>
    <!-- Custom -->
-   <script src="/resources/js/custom.js"></script>
+
    <script type="text/javascript">
-      $(document).ready(function() {
-         init_Home();
-      });
+      
    </script>
 </body>
 </html>

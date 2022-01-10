@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -35,34 +36,25 @@ public class CommentsController {
 	
 	
 	//댓글 insert
-	
-	@RequestMapping(value="/client/comments/json",method=RequestMethod.POST,produces="text/html;charset=utf8")
+	@RequestMapping(value="/client/comments/json",method=RequestMethod.POST,produces = "application/json")
 	@ResponseBody
-	public String commentsRegist(HttpServletRequest request,Comments comments) {
-		HttpSession session = request.getSession();
-		Member member=(Member)session.getAttribute("member");
+	public int commentsRegist(@RequestParam(value="msg",required = false, defaultValue="")String msg,
+			@RequestParam(value="movie_id",required = false, defaultValue="")int movie_id,
+			HttpServletRequest request,Comments comments) {
 		
-		String movie_id=request.getParameter("movie_id");
-		String msg=request.getParameter("msg");
 		
-		logger.debug(movie_id);
-		logger.debug(msg);
-
-	//	comments.setMember_id(member.getMember_id());
-		comments.setMovie_id(Integer.parseInt(movie_id));
-		comments.setMsg(msg);
-		
-		int result = commentsDAO.insert(comments);
-		
-		logger.debug("result"+result);
-		request.setAttribute("resutl", result);
-		StringBuilder sb=new StringBuilder();
-		sb.append("{");
-		sb.append("\"result\":1,");
-		sb.append("\"msg\":\"댓글등록성공\"");
-		sb.append("}");
-		
-		return sb.toString();
+			logger.debug("movie_id : "+movie_id);
+			logger.debug("msg : " + msg);
+			
+			comments.setMovie_id(movie_id);
+			comments.setMsg(msg);
+			comments.setMember_id(1);
+			
+			int result = commentsDAO.insert(comments);
+			
+			logger.debug("result"+result);
+	
+			return result;
 	}
 	//목록 가져오기
 	@RequestMapping(value="/client/comments/list",method=RequestMethod.GET)
@@ -73,8 +65,6 @@ public class CommentsController {
 		
 		List<Comments>commentsList=commentsService.selectAll(movie_id);
 
-				
-		
 		return commentsList;
 	}
 	

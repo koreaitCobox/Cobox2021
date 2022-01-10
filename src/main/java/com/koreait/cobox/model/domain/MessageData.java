@@ -4,8 +4,29 @@ import lombok.Data;
 
 @Data
 public class MessageData {
-   private int resultCode; //실패,성공 여부 판단 코드 
-   private String msg; //클라이언트가 보게될 메시지
-   private String url; //새롭게 요청할 페이지가 있다면 그 url
+	   private int resultCode; //�떎�뙣,�꽦怨� �뿬遺� �뙋�떒 肄붾뱶 
+	   private String msg; //�겢�씪�씠�뼵�듃媛� 蹂닿쾶�맆 硫붿떆吏�
+	   private String url; //�깉濡�寃� �슂泥��븷 �럹�씠吏�媛� �엳�떎硫� 洹� url
+	   
+	   
+   public int getResultCode() {
+		return resultCode;
+	}
+	public void setResultCode(int resultCode) {
+		this.resultCode = resultCode;
+	}
+	public String getMsg() {
+		return msg;
+	}
+	public void setMsg(String msg) {
+		this.msg = msg;
+	}
+	public String getUrl() {
+		return url;
+	}
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
    
 }

@@ -1,4 +1,199 @@
+
+* {
+	margin:0px;
+	padding:0px;
+	box-sizing: border-box;
+	}
 body {
-  font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Nanum Gothic';
+    font-weight: 400;
+    font-size: 13px;
+    color: #555;
 }
-* {box-sizing: border-box;}
+
+ /* 로그인 페이지 */
+ .login_top div {
+    display: block;
+    text-align: center;
+    vertical-align: middle;
+}
+.login_top .login_img {
+    color: #fff;
+    padding: 24px 0 32px;
+    
+}
+.login_img i {
+    left: 74px;
+    position: relative;
+}
+.login_img span {
+    position: relative;
+    top: 25px;
+    left: -24px;
+    font-size:20px;
+}
+.login_warp {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #243444 url(../images/common/bg_login.jpg) no-repeat center center;
+    background-size: cover;
+    min-height: 768px;
+}
+.login_input li {
+    background: #fff;
+    border-radius: 3px;
+    margin-left: 0px;
+    margin-bottom: 10px;
+    padding: 10px 0;
+}
+.login_box {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    margin: -227px auto 0;
+    width: 272px;
+}
+ol, ul {
+    list-style: none;
+}
+.login_id, .login_pw {
+    width: 255px;
+}
+.login_input .textbox label {
+    display: none !important;
+    padding: 1.125em 0.5em;
+}
+.login_input .login_id input {
+    padding-left: 50px;
+    background: transparent url(../images/common/icon_people.png) 20px center no-repeat;
+    border: 0 none;
+    font-size: 15px;
+    color: #404040;
+}
+.login_input input {
+    height: 34px;
+    line-height: 34px;
+    padding: 0;
+}
+.login_id, .login_pw {
+    width: 255px;
+}
+.login_input .login_pw input {
+    padding-left: 50px;
+    background: transparent url(../images/common/icon_lock.png) 20px center no-repeat;
+    border: 0 none;
+    font-size: 15px;
+    color: #404040;
+}
+.login_input li:last-child {
+    background: transparent;
+    border-bottom: 0 none;
+    padding: 0px 0 0;
+}
+.login_btn input {
+    width: 272px;
+    height: 56px;
+    border: 0 none;
+    border-radius: 5px;
+    font-family: 'Open Sans';
+    font-size: 20px;
+    color: #fff;
+    font-weight: 400;
+    cursor: pointer;
+    background: #628abd;
+}
+ul:after {
+    content: '';
+    display: block;
+    height: 0;
+    clear: both;
+}
+.login_desc {
+    position: absolute;
+    width: 800px;
+    left: 50%;
+    margin-left: -400px;
+    text-align: center;
+    color: #fff;
+    font-size: 12px;
+    padding-top: 18px;
+}
+.login_footer {
+    font-size: 12px;
+    color: #464646;
+    line-height: 27px;
+    text-align: center;
+    padding: 13px 0 16px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #fff;
+}
+input[type="text"], input[type="password"] {
+    vertical-align: top;
+    width: 100%;
+    height: 30px;
+    line-height: normal;
+    padding: 0.505em 0.5em;
+    font-family: inherit;
+    color: #31383f;
+    border: 0 none;
+    border-radius: 0;
+}
+
+
+/* movielist */
+.bnt-outline-danger{
+	color:#d9534f;
+	border-color: #d9534f;
+}
+.bnt-outline-success{
+	color:#008000;
+	border-color:#008000;
+}
+
+.bnt-outline-danger:hover {
+    color: #fff;
+    background-color: #d9534f;
+    border-color: #d9534f;
+}
+.bnt-outline-success:hover {
+    color: #fff;
+    background-color: #008000;
+    border-color: #008000;
+}
+.btn-1:focus, .btn-1:hover {
+    text-decoration: none;
+}
+.del-icon {
+    margin-right: 10px;
+}
+
+.btn-1 {
+	background-color:white;
+    display: inline-block;
+    font-weight: 400;
+    line-height: 1.25;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    -webkit-transition: all .2s ease-in-out;
+    -o-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+    cursor: pointer;
+}
+#movie_table tr > th:nth-child(8){
+	text-align:center;
+}
+
+

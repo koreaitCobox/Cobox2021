@@ -7,38 +7,59 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.3.xsd
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
-	
-	<!-- Root Context: defines shared resources visible to all other web components -->
-		<!--JNDI등록-->
-		<jee:jndi-lookup id="dataSource"
-						 jndi-name="jdbc/oracle"
-						 resource-ref="true"/>
-						 
-		<bean id="dataSourceTransactionManager"
-			  class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
-			  p:dataSource-ref="dataSource"/>
-			  
-		<bean id="jdbcTemplate"
-			  class="org.springframework.jdbc.core.JdbcTemplate"
-			  p:dataSource-ref="dataSource"/>	  				
-		
-		
-		
-<!-- Mybatis Spring  -->	
 
-	<bean id="sqlSessionFactoryBean" 
+<!-- 
+	<bean id="dataSource"
+		class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="driverClassName"
+			value="com.mysql.jdbc.Driver"></property>
+		<property name="url"
+			value="jdbc:mysql://cobox-aws.cqlctztp8p9s.ap-northeast-2.rds.amazonaws.com::3306/cobox-aws"></property>
+		<property name="username" value="cobox"></property>
+		<property name="password" value="cobox1234"></property>
+	</bean> -->
+
+	<bean id="dataSource"
+		class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="driverClassName"
+			value="com.mysql.cj.jdbc.Driver"></property>
+		<property name="url"
+			value="jdbc:mysql://cobox-aws.cqlctztp8p9s.ap-northeast-2.rds.amazonaws.com:3306"></property>
+		<property name="username" value="cobox"></property>
+		<property name="password" value="cobox1234"></property>
+	</bean>
+
+
+
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	<!--JNDI등록 -->
+	<jee:jndi-lookup id="dataSource" jndi-name="jdbc/mysql" resource-ref="true" />
+
+	<bean id="dataSourceTransactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+		p:dataSource-ref="dataSource" />
+
+	<bean id="jdbcTemplate"
+		class="org.springframework.jdbc.core.JdbcTemplate"
+		p:dataSource-ref="dataSource" />
+
+	<!-- Mybatis Spring -->
+
+	<bean id="sqlSessionFactoryBean"
 		class="org.mybatis.spring.SqlSessionFactoryBean"
 		p:dataSource-ref="dataSource"
-		p:configLocation="classpath:com/koreait/cobox/mybatis/config/config.xml"/>
-		
-	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
-		<constructor-arg ref="sqlSessionFactoryBean"/>
-	</bean>			
-	
-	
-			<!-- 모델 영역은 모든 서블릿에서 공용으로 사용할 예정이므로, ServletContext 수준에서 
-		어플리케이션이 가동될때 부터 등록되어 있어야 한다.. -->
-	<context:component-scan base-package="com.koreait.cobox">
-		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>				
-	</context:component-scan>			
+		p:configLocation="classpath:com/koreait/cobox/mybatis/config/config.xml" />
+
+	<bean id="sqlSessionTemplate"
+		class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="sqlSessionFactoryBean" />
+	</bean>
+
+	<!-- 모델 영역은 모든 서블릿에서 공용으로 사용할 예정이므로, ServletContext 수준에서 어플리케이션이 가동될때 부터 
+		등록되어 있어야 한다.. -->
+	<context:component-scan
+		base-package="com.koreait.cobox">
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
 </beans>

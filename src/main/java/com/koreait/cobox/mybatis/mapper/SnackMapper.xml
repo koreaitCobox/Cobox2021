@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Snack">
+
+<!-- 스낵 정보 입력 -->
+<insert id = "insert" parameterType="Snack">
+	insert into cobox.snack(
+		topcategory_id
+		,snack_name
+		,price
+		,amount
+		,detail
+		,filename
+		,sales_amount
+	)
+	values(
+		#{topcategory_id}
+		,#{snack_name}
+		,#{price}
+		,#{amount}
+		,#{detail}
+		,#{filename}
+		,0
+	)
+	<selectKey order="AFTER" keyProperty = "snack_id" resultType="int">
+		select last_insert_id()
+	</selectKey>
+</insert>
+
+<!-- 스낵 가져오기  -->
+
+<select id="selectAll" resultType="Snack">
+	select * from  cobox.snack
+</select>
+<select id="selectById" parameterType="int" resultType="Snack">
+	select * from  cobox.snack
+		where 
+	topcategory_id = #{topcategory_id}
+</select>
+
+
+
+
+
+
+
+</mapper>

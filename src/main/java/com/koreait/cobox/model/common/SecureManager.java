@@ -16,7 +16,7 @@ public class SecureManager {
 		
 		try {
 			MessageDigest digest=MessageDigest.getInstance("SHA-256") ;
-			byte[] data = password.getBytes("UTF-8");//일단 바이트 배열로 쪼개기!!
+			byte[] data = password.getBytes("UTF-8");//바이트 배열로 쪼개기!!
 			byte[] hash = digest.digest(data);
 			
 			//쪼개진 데이터를 대상으로 16진수값으로 변환하여 문자열로 변환

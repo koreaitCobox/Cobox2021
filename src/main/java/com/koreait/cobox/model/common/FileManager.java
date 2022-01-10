@@ -37,6 +37,7 @@ public class FileManager {
 
 	// 파일 저장하기
 	public void saveFile(String realDir, MultipartFile multi) {
+		logger.debug(realDir);
 		try {
 			multi.transferTo(new File(realDir));
 		} catch (IllegalStateException e) {

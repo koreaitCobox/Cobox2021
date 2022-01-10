@@ -27,10 +27,12 @@ public class MybatisMemberDAO implements MemberDAO {
 
 	@Override
 	public Member select(Member member) throws MemberNotFoundException {
-		Member obj = sqlSessionTemplate.selectOne("Member.select", member); //여기서 나올수 있는 결과  selectOne 을 써서 에러가 난데요 
-		if (obj == null) {// 가입되지 않은 정보로 로그인을 하려고 하면
+		Member obj = sqlSessionTemplate.selectOne("Member.select", member); 
+		/*if (obj == null) {// 가입되지 않은 정보로 로그인을 하려고 하면
+			
 			throw new MemberNotFoundException("가입 된 정보가 없습니다.\n 회원가입을 먼저 진행해주세요.");
-		}
+			
+		}*/
 		return obj;
 	}
 

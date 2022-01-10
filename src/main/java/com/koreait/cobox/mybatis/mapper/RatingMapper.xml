@@ -3,11 +3,20 @@
 <mapper namespace="Rating">
 
 <select id="selectAllById" resultType="Rating" parameterType="int">
-		select * from rating where rating_id=#{rating_id}
+		select * from
+		 cobox.rating 
+		where rating_id=#{rating_id}
 </select>
 
 <insert id="insert" parameterType="Rating">
-	insert into rating(rating_id,movie_id,rating_name) values(seq_color.nextval,#{movie_id},#{movie_name})
+	insert into cobox.rating (
+		movie_id
+		,rating_name
+	)
+	 values (
+	 	#{movie_id}
+	 	,#{movie_name}
+	 )
 </insert>
 
 <!-- id에 맞는 rating 한건 가져오기 -->

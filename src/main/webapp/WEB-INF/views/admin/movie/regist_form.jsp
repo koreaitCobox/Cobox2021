@@ -39,8 +39,14 @@ input[type=button]:hover {
 
 .container {
 	border-radius: 5px;
-	background-color: #f2f2f2;
+	border: 1px solid black;
 	padding: 20px;
+	width:50%;
+	display:inline-block;
+	
+}
+.basic_table{
+	text-align:center;
 }
 
 
@@ -58,6 +64,22 @@ input[type=button]:hover {
 	color: red;
 	cursor: pointer;
 }
+
+#movie_name{
+	width:50%;
+}
+#rating_id{
+	width:50%;
+}
+#director{
+	width:50%;
+}
+#actor{
+	width:50%;
+}
+#playdate{
+	width:50%;
+}
 </style>
 <!-- 달력 -->
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
@@ -65,50 +87,66 @@ input[type=button]:hover {
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 
 <script type="text/javascript">
-var genre=[];//선택한 장르사이즈를 담는 배열
 
-	$(function(){
-		CKEDITOR.replace("story");
-		
-		//체크박스 이벤트 구현 (영화장르 값 얻기)
-		$("input[type='checkbox']").on("click", function(e) {
-			var ch = e.target;//이벤트 일으킨 주체컴포넌트 즉 체크박스
-			//체크박스의 길이 얻기 
-			var ch = $("input[name='genre_name']");
-			var len = $(ch).length; //반복문이용하려고..
-
-			genre = [];//배열 초기화
-			console.log("채우기 전 genre의 길이는",genre.length);
+$(document).ready(function(){
+	CKEDITOR.replace("story"); //editor 이름 부여
+	//달력 생성
+	$("#playdate").datepicker({
+		dateFormat : 'yy-mm-dd'
+	});
+	
+	
+	// db에 담겨져있는 장르정보 가져오기
+	$.ajax({
+		type:'POST',
+		url:'/admin/movie/genre',
+		dataType:'json',
+		success:function(data){
+			var genreList = data.genreList;
+			var htmlStr='';
 			
-			for (var i = 0; i < len; i++) {
-				//만일 체크가 되어있다면, 기존 배열을 모두 지우고, 체크된 체크박스 값만 배열에 넣자!!
-				if ($($(ch)[i]).is(":checked")) {
-					genre.push($($(ch)[i]).val());
+			$.each(genreList, function(idx,obj){
+				htmlStr += '<input type="checkbox" id="genre_list_name" name="genre_list_name" onclick="getGenre(this);" value="'+obj.genre_name+'">'+obj.genre_name+'</input>';
+				if(idx%5==0&&idx!=0){
+					htmlStr+='<p>'
 				}
-				//console.log(i,"번째 체크박스 상태는 ", $($(ch)[i]).is(":checked"));
-				console.log("채우고 genre의 길이는",genre.length);
-			}
-			console.log("서버에 전송할 사이즈 배열의 구성은 ", genre);
-		});
+			});
+			
+			$('.genre_box').empty().append(htmlStr);
+		}
 	});
-		
+	
+// ===========================
+
+});//document ready end
+
+var genre = []; 
+//const genre = new Set();
+function getGenre(e){
+	// 영화 장르 
+	genre=[];
+	var ch = $("input[name='genre_list_name']");
+	var len = ch.length; //반복문이용하려고, 25개 
 	
 	
-	//달력생성
-	$(function() {
-		$("#datepicker1").datepicker({
-			dateFormat : 'yy-mm-dd'
-		});
-	});
-	//장르 선택시 
+	for(var i=0; i<len; i++){
+		if($($(ch)[i]).is(":checked")){
+			genre.push($($(ch)[i]).val());
+		}
+	}
+	console.log("서버에 전송할 사이즈 배열의 구성은 ", genre);
+}
+
 	
 	//영화 등록
-	function regist(){
+function regist(){
+		
 		var formData=new FormData($("form")[0]);
 		//폼데이터에 에디터값 추가하기
 		formData.append("story",CKEDITOR.instances["story"].getData());
 		for(var i=0;i<genre.length;i++){
-			formData.append("genre["+i+"].genre_name",genre[i]);
+			formData.append("genreList["+i+"].genre_list_name",genre[i]);
+			//키값, val
 		}
 		/*비동기 업로드*/
 		$.ajax({
@@ -120,8 +158,8 @@ var genre=[];//선택한 장르사이즈를 담는 배열
 			success:function(responseData){
 				var json = JSON.parse(responseData);//string-->json
 			if(json.result==1){
-				alert(json.msg);
-				location.href="/admin/movie/list"
+				alert(json.msg);//메시지 뿌리고 
+				location.href="/admin/movie/list" // 등록된 페이지 뿌려주기
 			}else{
 				alert(json.msg);
 			}
@@ -139,62 +177,41 @@ var genre=[];//선택한 장르사이즈를 담는 배열
 
 <body>
 	<%@ include file="../inc/main_navi.jsp"%>
-
-	<h3>영화 등록</h3>
-	<div class="container">
-		<form>
-			<h4>장르선택(복수 가능)</h4>
-			<input type="checkbox" id="genre_name" name="genre_name" value="hrror" />hrror
-			<input type="checkbox" id="genre_name" name="genre_name" value="drama" />drama
-			<input type="checkbox" id="genre_name" name="genre_name" value="SF" />SF
-			<input type="checkbox" id="genre_name" name="genre_name" value="romance" />romance
-			<input type="checkbox" id="genre_name" name="genre_name" value="comic" />comic
-			<p>
-			<input type="checkbox" id="genre_name" name="genre_name" value="ani" />ani
-			<input type="checkbox" id="genre_name" name="genre_name" value="noir" />noir
-			<input type="checkbox" id="genre_name" name="genre_name" value="docu" />docu
-			<input type="checkbox" id="genre_name" name="genre_name" value="music" />music
-			<input type="checkbox" id="genre_name" name="genre_name" value="mystery" />mystery
-			<p>
-			<input type="checkbox" id="genre_name" name="genre_name" value="crime" />crime
-			<input type="checkbox" id="genre_name" name="genre_name" value="omnibus" />omnibus
-			<input type="checkbox" id="genre_name" name="genre_name" value="thriller" />thriller
-			<input type="checkbox" id="genre_name" name="genre_name" value="sports" />sports
-			<input type="checkbox" id="genre_name" name="genre_name" value="saguk" />saguk
-			<p>
-			<input type="checkbox" id="genre_name" name="genre_name" value="child" />child
-			<input type="checkbox" id="genre_name" name="genre_name" value="action" />action
-			<input type="checkbox" id="genre_name" name="genre_name" value="adventure" />adventure
-			<input type="checkbox" id="genre_name" name="genre_name" value="history" />history
-			<input type="checkbox" id="genre_name" name="genre_name" value="war" />war
-			
-
-			<input type="text" name="movie_name" placeholder="영화명"> 
-
-			<select name="rating_id">		
-				<option >관람등급 선택</option>
-				<option value="1">all</option>
-				<option value="2">12</option>
-				<option value="3">15</option>
-				<option value="4">adult</option>
-			</select>
-			
-			 <input type="text" name="director" placeholder="감독">
-			 <input type="text" name="actor" placeholder="배우">
-			 <input type="text" name="release" placeholder="개봉일" id="datepicker1">
-			 <h4>줄거리</h4>
-			<textarea id="story" name="story" placeholder="영화 줄거리" style="height: 200px"></textarea>
-
-			
-			<p>
-				대표이미지: <input type="file" name="repImg" id="repImg">
-			</p>
-
-			<input type="button" value="글등록" onClick="regist()" id="registBtn"> 
-			<input type="button" value="목록보기" onClick="location.href='/admin/movie/list'">
-			
-		</form>
+	<div class="basic_table">
+		<h3>영화 등록</h3>
+		<div class="container">
+			<form>
+				<h4>장르선택(복수 가능)</h4>
+				<div class="genre_box">
+					<input type="checkbox" id="genre_list_name" name="genre_list_name" value="hrror" />hrror
+				</div>
+	
+				<input type="text" id="movie_name" name="movie_name" placeholder="영화명"> 
+	
+				<select id="rating_id" name="rating_id">		
+					<option >관람등급 선택</option>
+					<option value="1">all</option>
+					<option value="2">12</option>
+					<option value="3">15</option>
+					<option value="4">adult</option>
+				</select>
+				
+				 <input type="text" id="director" name="director" placeholder="감독">
+				 <input type="text" id="actor" name="actor" placeholder="배우">
+				 <input type="text" id="playdate" name="playdate" placeholder="개봉일" >
+				 <h4>줄거리</h4>
+				<textarea id="story" name="story" placeholder="영화 줄거리" style="height: 200px"></textarea>
+	
+				
+				<p>
+					대표이미지: <input type="file" name="repImg" id="repImg">
+				</p>
+	
+				<input type="button" value="글등록" onClick="regist()" id="registBtn"> 
+				<input type="button" value="목록보기" onClick="location.href='/admin/movie/list'">
+				
+			</form>
+		</div>
 	</div>
-
 </body>
 </html>

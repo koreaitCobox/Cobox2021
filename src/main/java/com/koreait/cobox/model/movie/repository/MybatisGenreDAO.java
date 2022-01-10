@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.koreait.cobox.exception.DMLException;
 import com.koreait.cobox.model.domain.Genre;
+import com.koreait.cobox.model.domain.GenreList;
 
 @Repository
 public class MybatisGenreDAO implements GenreDAO{
@@ -33,7 +34,7 @@ public class MybatisGenreDAO implements GenreDAO{
 	}
 
 	@Override
-	public void insert(Genre genre) throws DMLException{
+	public void insert(GenreList genre) throws DMLException{
 	 int result = sqlSessionTemplate.insert("Genre.insert",genre);
 		if(result==0) {
 			throw new DMLException("장르 등록에 실패했습니다.");
@@ -41,7 +42,7 @@ public class MybatisGenreDAO implements GenreDAO{
 }
 
 	@Override
-	public void update(Genre genre)  throws DMLException {
+	public void update(GenreList genre)  throws DMLException {
 		// TODO Auto-generated method stub
 		
 	}
@@ -55,9 +56,11 @@ public class MybatisGenreDAO implements GenreDAO{
 	}
 
 	@Override
-	public List selectByGenre(String genre_name) {
-		return sqlSessionTemplate.selectList("Genre.selectByGenre",genre_name);
+	public List selectByGenre(String genre_list_name) {
+		return sqlSessionTemplate.selectList("Genre.selectByGenre",genre_list_name);
 		
 	}
+
+
 	
 }

@@ -3,12 +3,11 @@
 <html>
 <head>
 <%@ include file="../inc/header.jsp"%>
-<%@include file="../inc/script.jsp"%>
-
+<%@ include file="../inc/script.jsp"%>
+<link type="text/css" rel="stylesheet" href="/resources/css/style.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
-body {
-	font-family: Arial, Helvetica, sans-serif;
-}
+
 
 * {
 	box-sizing: border-box;
@@ -17,27 +16,14 @@ body {
 /* style the container */
 #form_container {
 	position: relative;
-	border: solid 5px #A9AD1C;
-	border-radius: 10px;
+	border: solid 1px #2e292e;
 	background-color: rgba(255, 255, 255, 0.8);
 	padding: 20px 0 30px 0;
-	margin: 150px;
+	margin: 0 auto;
+	margin-top:100px;
+	width:900px;
 }
 
-/* style inputs and link buttons */
-input, .btn {
-	width: 100%;
-	padding: 12px;
-	border-radius: 5px;
-	margin: 5px 0;
-	opacity: 0.85;
-	display: inline-block;
-	font-size: 17px;
-	line-height: 20px;
-	text-decoration: none; /* remove underline from anchors */
-	background-color: rgb(222, 222, 222);
-	color: black;
-}
 
 input:hover, .btn:hover {
 	opacity: 1;
@@ -70,17 +56,39 @@ input[type=submit]:hover {
 	background-color: #45a049;
 }
 
-#login_btn {
+/* #login_btn {
 	color: black;
 	background-color: rgb(222, 222, 222);
 	width: 49.5%
+} */
+.btn-block {
+    display: block;
+    width: 50%;
+    padding-right: 0;
+    padding-left: 0;
 }
-
-#join_btn {
-	color: black;
-	background-color: rgb(222, 222, 222);
-	width: 49.5%
+.btn {
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.428571429;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle!important;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
 }
+ #join_btn {
+	margin-top:10px;
+} 
 
 /* Two-column layout */
 .col {
@@ -89,6 +97,21 @@ input[type=submit]:hover {
 	margin: auto;
 	padding: 0 50px;
 	margin-top: 6px;
+	
+}
+.login_box{
+	float:right;
+	width: 50%;
+	padding-left:40px;
+	height:200px;
+}
+.login_box > a{
+	position:relative;
+	margin:7px;
+	width: 344px;	
+	margin-top: 13px;
+	top: 159px;
+    left: 148px;
 }
 
 /* Clear floats after the columns */
@@ -148,16 +171,61 @@ input[type=submit]:hover {
 }
 </style>
 <script>
+$(document).ready(function() {
+	//카카오 로그인 키 삽입	
+	Kakao.init('c89a17aca474ee70198a2cac61fe14e5');
+	console.log(Kakao.isInitialized());
+	
+	
 
 	
-	function requestLogin() {
-		$("#formtable").attr({
-			action : "/client/member/login",
-			method : "post"
-		});
-		$("#formtable").submit();
-	}
- 
+});
+	
+function requestLogin() {
+	$("#formtable").attr({
+		action : "/client/member/login",
+		method : "post"
+	});
+	$("#formtable").submit();
+}
+
+//카카오 로그인
+function kakaoLogin(){
+	Kakao.Auth.login({
+		success:function(response){
+			Kakao.API.request({
+				url:'/v2/user/me',
+				success:function(response){
+					console.log(response);
+				},
+				fail:function(error){
+					console.log(error)
+				},
+			});
+		},
+		fail:function(error){
+			console.log(error);
+		},
+	});
+}
+
+//https://accounts.kakao.com/weblogin/account/info 여기서 로그인 해제 
+//카카오 로그아웃
+function kakaoLogout() {
+    if (Kakao.Auth.getAccessToken()) {
+      Kakao.API.request({
+        url: '/v1/user/unlink',
+        success: function (response) {
+        	console.log(response)
+        },
+        fail: function (error) {
+          console.log(error)
+        },
+      })
+      Kakao.Auth.setAccessToken(undefined)
+    }
+  }  
+	
 
 </script>
 </head>
@@ -171,7 +239,13 @@ input[type=submit]:hover {
 		<div id="form_container">
 			<form id="formtable" method="post">
 				<div class="row">
-					<div style="text-align: center; padding: 15px; font-size: 50px">로그인</div>
+					
+						<p class="login-text">
+						    <span class="fa-stack fa-lg">
+						      <i class="fa fa-lock fa-2x" aria-hidden="true"></i>
+						    </span>
+					  	</p>
+					
 					<div class="vl">
 						<span class="vl-innertext">or</span>
 					</div>
@@ -181,21 +255,37 @@ input[type=submit]:hover {
 						<div class="hide-md-lg">
 							<p>Or</p>
 						</div>
-						<input type="text" name="mid" placeholder="아이디를 입력해주세요" required>
-						<input type="password" name="password" placeholder="비밀번호를 입력해주세요" required>
+						<!-- 아이디를 입력하세요 -->
+						<div class="form-group input-group">
+							<span class="input-group-addon">
+								<i class="fa fa-user-circle" aria-hidden="true">
+								</i>
+							</span>
+							<input type="text" class="form-control" name="mid" placeholder="아이디를 입력해주세요" required>
+						</div>
+						<!-- 아이디 입력 끝 -->
+						<!-- 비밀번호를 입력하세요 -->
+						<div class="form-group input-group">
+							<span class="input-group-addon">
+								<i class="fa fa-key" aria-hidden="true"></i>
+								 
+							</span>
+							<input type="password" class="form-control" name="password" placeholder=" 비밀번호를 입력해주세요" required>
+						</div>
+						<!-- 비밀번호 입력 끝  -->
 						 
-						<input id="login_btn" type="button" value="Login" onClick="requestLogin()" > 
+						<input id="login_btn" type="button" class="btn-block btn" value="Login" onClick="requestLogin()" > 
 						
 						<a href="/client/member/join"> 
-							<input id="join_btn" type="button" value="회원가입">
+							<input id="join_btn" type="button" class="btn-block btn" value="회원가입">
 						</a>
 					</div>
 
-					<div class="col">
-						<a href="#" class="kakao btn"> <i class="fa fa-kakao fa-fw"></i>Login
+					<div class="login_box">
+						<a href="javascript:kakaoLogin();" class="kakao btn"> <i class="fa fa-kakao fa-fw"></i>Login
 							with Kakao
-						</a> <a href="#" class="naver btn"> <i class="fa fa-naver fa-fw"></i>
-							Login with Naver
+						</a> <a href="#" class="naver btn"> <i class="fa fa-github" aria-hidden="true"></i>
+							Login with Github
 						</a> <a href="#" class="fb btn"> <i class="fa fa-facebook fa-fw"></i>
 							Login with Facebook
 						</a>

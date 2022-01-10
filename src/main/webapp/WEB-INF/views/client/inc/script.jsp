@@ -11,7 +11,6 @@
 
 <!-- Slider Revolution core JavaScript files -->
 <script type="text/javascript" src="/resources/revolution/js/jquery.themepunch.tools.min.js"></script>
-<script type="text/javascript" src="rs-plugin/js/jquery.themepunch.plugins.min.js"></script>
 <script type="text/javascript" src="/resources/revolution/js/jquery.themepunch.revolution.min.js"></script>
 
 <!-- Slider Revolution extension scripts. --> 
@@ -48,7 +47,6 @@
 <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-525fd5e9061e7ef0"></script>
 <!-- Inview -->
 <script src="/resources/js/external/jquery.inview.js"></script>
-<!-- Twitter feed -->
-<script src="/resources/js/external/twitterfeed.js"></script>
+
 <!-- Custom -->
 <script src="/resources/js/custom.js"></script>

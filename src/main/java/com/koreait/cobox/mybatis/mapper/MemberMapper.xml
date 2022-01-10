@@ -4,15 +4,34 @@
 
 	<!-- 회원가입정보 -->
 	<insert id="insert" parameterType="Member">
-		insert into member(member_id,
-		mid, password, name, birth, email_id, email_server, phone)
-		values(seq_member.nextval,
-		#{mid},#{password},#{name},#{birth},#{email_id},#{email_server},#{phone})
+		insert into member(
+			mid,
+			password,
+			name,
+			birth,
+			email_id,
+			email_server,
+			phone
+		)
+		values(
+			#{mid},
+			#{password},
+			#{name},
+			#{birth},
+			#{email_id},
+			#{email_server},
+			#{phone}
+		)
 	</insert>
 	
 	<!-- 패스워드 체크 -->
 	<select id="passChk" resultType="int">
-		select count(*) from member where mid=#{mid} and password={password}
+		select count(*) 
+				from member 
+					where 
+					mid=#{mid}
+			 		and
+					password={password}
 	</select>
 
 	<!-- 아이디 중복체크 -->

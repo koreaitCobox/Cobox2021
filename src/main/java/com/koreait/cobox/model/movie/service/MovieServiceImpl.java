@@ -1,6 +1,7 @@
 package com.koreait.cobox.model.movie.service;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,9 @@ import org.springframework.stereotype.Service;
 
 import com.koreait.cobox.exception.DMLException;
 import com.koreait.cobox.model.common.FileManager;
+import com.koreait.cobox.model.domain.Box;
 import com.koreait.cobox.model.domain.Genre;
+import com.koreait.cobox.model.domain.GenreList;
 import com.koreait.cobox.model.domain.Movie;
 import com.koreait.cobox.model.movie.repository.GenreDAO;
 import com.koreait.cobox.model.movie.repository.MovieDAO;
@@ -25,11 +28,14 @@ public class MovieServiceImpl implements MovieService{
 	@Autowired
 	private GenreDAO genreDAO;
 	
-	
-
 	@Override
 	public List selectAll() {
 		return movieDAO.selectAll();
+	}
+
+	@Override
+	public List<Movie> selectAll(HashMap<Object,Object> hashMap) {
+		return movieDAO.selectAll(hashMap);
 	}
 
 	@Override
@@ -53,7 +59,7 @@ public class MovieServiceImpl implements MovieService{
 		
 		
 		//장르
-		for(Genre genre:movie.getGenre()) {
+		for(GenreList genre:movie.getGenreList()) {
 			genre.setMovie_id(movie.getMovie_id());
 			genreDAO.insert(genre);
 		}
@@ -90,6 +96,36 @@ public class MovieServiceImpl implements MovieService{
 	public List selectByGenre(String genre_name) {
 		
 		return movieDAO.selectByGenre(genre_name);
+	}
+
+	@Override
+	public List<?> getGenreList() {
+		
+		return movieDAO.getGenreList();
+	}
+
+	@Override
+	public List<?> getBoxList() {
+		
+		return movieDAO.getBoxList();
+	}
+
+	@Override
+	public Box getBoxPrice(int box_id) {
+
+		return movieDAO.getBoxPrice(box_id);
+	}
+
+	@Override
+	public int selectMovieCount(HashMap<Object, Object> hashmap) {
+		
+		return movieDAO.selectMovieCount(hashmap);
+	}
+
+	@Override
+	public int deleteCheck(HashMap<Object, Object> hashMap) {
+		
+		return movieDAO.movieCheckDelete(hashMap);
 	}
 
 

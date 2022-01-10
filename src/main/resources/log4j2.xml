@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<Appenders>
+		<Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d %5p [%c][%L LINE] %m%n" />
+        </Console>
+	
+		<appender name="console-dblog" class="org.apache.log4j.ConsoleAppender"> 
+	         <PatternLayout pattern="%d %5p %m%n" />
+        </appender>
+	<!-- 	<appender name="console"
+			class="org.apache.log4j.ConsoleAppender">
+			<param name="Target" value="System.out" />
+			<layout class="org.apache.log4j.PatternLayout">
+				<param name="ConversionPattern" value="%-5p: %c - %m%n" />
+			</layout>
+		</appender> -->
+
+
+
+		<!-- <File name="File" fileName="D:/Error.log" append="false"> <File name="File" 
+			fileName="/data/vibrio/Error.log" append="false"> <PatternLayout pattern="%d 
+			%5p [%c] %m%n"/> </File> -->
+
+		<!-- <RollingFile name="File"
+			fileName="D:/cobox_workspace/Error.log"
+			filePattern="D:/cobox_workspace/Error.%i.%d{yyyy-MM-dd}.log">
+			<PatternLayout
+				pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+			<Policies>
+				<SizeBasedTriggeringPolicy size="10MB" /> 이 용량이 초과되면 아래 DefaultRolloverStrategy 정책만큼 넘버링 할거다.
+			</Policies>
+			<DefaultRolloverStrategy max="1000" fileIndex="min" />0부터 1000개 까지만 
+				만들거다 1000개 초과되면 파일이 더생성안된다.
+		</RollingFile> -->
+
+	</Appenders>
+	
+	<Loggers>
+		<Logger name="java.sql" level="DEBUG" additivity="false">
+            <AppenderRef ref="console" />
+        </Logger>
+        <Logger name="egovframework" level="DEBUG" additivity="false">
+            <AppenderRef ref="console" />
+        </Logger>
+        <Logger name="org.springframework" level="ERROR" additivity="false">
+            <AppenderRef ref="console" />
+        </Logger>
+		<!-- 로그출력 -->
+		<!-- Query Loggers 쿼리(파라미터까지) --> 
+	        <Logger name="jdbc.sqlonly" additivity="false"> 
+		        <level value="DEBUG"/> 
+		        <appender-ref ref="console" />
+	        </Logger>
+	        <!--  SQL문과 해당 SQL을 실행시키는데 수행된 시간 정보(milliseconds)를 포함한다. 필요시 open -->
+	        <Logger name="jdbc.sqltiming" level="ERROR" additivity="false">
+	            <AppenderRef ref="WARN" />
+	        </Logger>
+	        <!--  SQL 결과 조회된 데이터의 table을 로그로 남긴다.(빼도됨) -->
+	        <Logger name="jdbc.resultsettable" additivity="false"> 
+		        <level value="WARN"/> 
+		        <appender-ref ref="console"/> 
+	        </Logger>
+	        <!-- ResultSet을 제외한 모든 JDBC 호출 정보를 로그로 남긴다. 많은 양의 로그가 생성되므로 특별히 JDBC 문제를 추적해야 할 필요가 있는 경우를 제외하고는 사용을 권장하지 않는다.--> 
+	        <Logger name="jdbc.audit" additivity="false"> 
+		        <level value="WARN"/> 
+		        <appender-ref ref="console"/> 
+	        </Logger>
+	        <!-- ResultSet을 포함한 모든 JDBC 호출 정보를 로그로 남기므로 매우 방대한 양의 로그가 생성된다. -->
+	        <Logger name="jdbc.resultset" additivity="false"> 
+		        <level value="WARN"/> 
+		        <appender-ref ref="console"/> 
+	        </Logger>
+       </Loggers>
+        
+        <Root level="DEBUG">
+            <AppenderRef ref="console" />
+        </Root>
+
+
+
+
+</Configuration>

@@ -3,13 +3,19 @@
 <mapper namespace="Genre">
 
 
-<insert id="insert" parameterType="Genre">
-	insert into genre(genre_id,movie_id,genre_name)
-	 values(seq_genre.nextval, #{movie_id},#{genre_name})
+<insert id="insert" parameterType="GenreList">
+	insert into genre_list (
+		 movie_id
+		,genre_list_name
+	)
+	values (
+	   #{movie_id}
+	  ,#{genre_list_name}
+	)
 </insert>
 
-<select id="selectByMovie_id" parameterType="int" resultType="Genre">
-	select * from genre where movie_id=#{movie_id}
+<select id="selectByMovie_id" parameterType="int" resultType="GenreList">
+	select * from cobox.genre_list where movie_id=#{movie_id}
 </select>
 
 <select id="select" parameterType="int" resultType="Genre">
@@ -17,12 +23,17 @@
 </select>
 
 <delete id="delete" parameterType="int">
-	delete from genre where movie_id=#{movie_id}
+	delete
+		from genre_list
+	 	where 
+	 	movie_id=#{movie_id}
 </delete>
 
-<update id="update" parameterType="Genre">
-	update genre set genre_name=#{genre_name}
-	where movie_id=#{movie_id}
+<update id="update" parameterType="GenreList">
+	update
+		genre_list set
+		genre_name=#{genre_list_name}
+		where movie_id=#{movie_id}
 </update>
 <!--장르에 맞는 무비아이디 가져오기  -->
 <select id="selectByGenre" resultType="Genre">

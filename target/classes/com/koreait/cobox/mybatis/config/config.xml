@@ -3,6 +3,7 @@
   PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
+
 	<typeAliases>
 		<typeAlias type="com.koreait.cobox.model.domain.Genre" alias="Genre" />
 		<typeAlias type="com.koreait.cobox.model.domain.Rating" alias="Rating" />
@@ -12,6 +13,11 @@
 		<typeAlias type="com.koreait.cobox.model.domain.Theater" alias="Theater"/>
 		<typeAlias type="com.koreait.cobox.model.domain.Member" alias="Member"/>
 		<typeAlias type="com.koreait.cobox.model.domain.Rating" alias="Rating"/>
+		<typeAlias type="com.koreait.cobox.model.domain.GenreList" alias="GenreList"/>
+		<typeAlias type="com.koreait.cobox.model.domain.Box" alias="Box"/>
+		<typeAlias type="com.koreait.cobox.model.domain.Snack" alias="Snack"/>
+		<typeAlias type="com.koreait.cobox.model.domain.Schedule" alias="Schedule"/>
+		<typeAlias type="com.koreait.cobox.model.domain.PSummary" alias="PSummary"/>
 	</typeAliases>
 	<mappers>
 		<mapper resource="com/koreait/cobox/mybatis/mapper/GenreMapper.xml"/>
@@ -22,6 +28,8 @@
 		<mapper resource="com/koreait/cobox/mybatis/mapper/TheaterMapper.xml"/>
 		<mapper resource="com/koreait/cobox/mybatis/mapper/MemberMapper.xml"/>
 		<mapper resource="com/koreait/cobox/mybatis/mapper/RatingMapper.xml"/>
+		<mapper resource="com/koreait/cobox/mybatis/mapper/SnackMapper.xml"/>
+		<mapper resource="com/koreait/cobox/mybatis/mapper/ScheduleMapper.xml"/>
 	</mappers>
 
 </configuration>

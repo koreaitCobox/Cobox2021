@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Schedule">
+
+<insert id="insert" parameterType="Schedule">
+	insert into cobox.schedule(
+		member_id
+		,box_id
+		,time_table_id
+		,movie_id
+		,use_day
+		,total_price 
+	)
+	values(
+		#{member_id}
+		,#{box_id}
+		,#{time_table_id}
+		,#{movie_id}
+		,#{use_day}
+		,#{total_price}
+	)
+</insert>
+<insert id="insertP" parameterType="PSummary">
+	insert into cobox.p_summary(
+		schedule_id
+		,p_method_id
+		,p_date
+		,total_price
+	)
+	values(
+		#{schedule_id}
+		,#{p_method_id}
+		,now()
+		,#{total_price}
+	)
+</insert>
+<select id="selectAllById" parameterType="int" resultType="map">
+	select * from 
+		cobox.schedule left join cobox.box
+		on cobox.schedule.box_id = cobox.box.box_id
+		join cobox.time_table as tt 
+		on cobox.schedule.time_table_id = tt.time_table_id
+		join cobox.movie as movie
+		on cobox.schedule.movie_id = movie.movie_id
+		where member_id = #{member_id}
+</select>
+
+</mapper>

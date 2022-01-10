@@ -29,25 +29,25 @@ public class MemberController {
 	@Autowired
 	private MemberService memberService;
 		
-	//회원가입폼 요청 
+	//회원가입 
 	@RequestMapping(value="/client/member/join", method=RequestMethod.GET)
 	public ModelAndView getRegistForm(HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView("client/member/join");
 		return mav;
 	}
 
-	//회원가입폼 정보(insert)
+	//회원가입(insert)
 	@RequestMapping(value="/client/member/regist", method=RequestMethod.POST, produces="text/html;charset=utf-8")
 	@ResponseBody
 	public String regist(Member member) {
 		
-		logger.debug("아이디 "+member.getMid());
-		logger.debug("비밀번호 "+member.getPassword());
-		logger.debug("이름 "+member.getName());
-		logger.debug("생년월일"+member.getBirth());
-		logger.debug("이메일id "+member.getEmail_id());
-		logger.debug("이메일server "+member.getEmail_server());
-		logger.debug("핸드폰번호 "+member.getPhone());
+		logger.debug("멤버 아이디 : "+member.getMid());
+		logger.debug("비밀번호 :"+member.getPassword());
+		logger.debug("이름 : "+member.getName());
+		logger.debug("생년월일 :"+member.getBirth());
+		logger.debug("이메일아이디 : "+member.getEmail_id());
+		logger.debug("서버 : "+member.getEmail_server());
+		logger.debug("전화번호 : "+member.getPhone());
 		
 		memberService.insert(member);
 
@@ -60,7 +60,7 @@ public class MemberController {
 		return sb.toString();
 	} 
 	
-	//로그인 홈 요청 
+	//濡쒓렇�씤 �솃 �슂泥� 
 	@RequestMapping(value="/client/member/formtable", method=RequestMethod.GET)
 	public ModelAndView getLoginForm() {
 		ModelAndView mav = new ModelAndView("client/member/login");
@@ -68,20 +68,29 @@ public class MemberController {
 		return mav;
 	}
 	
-	//로그인 요청 처리(select)
+	//회원 로그인━(select)
 	@RequestMapping(value="/client/member/login", method=RequestMethod.POST)
 	public String login(Member member, HttpServletRequest request) {
-		//db에 존재여부 확인 
+		
 				Member obj=memberService.select(member);
+				if(obj == null) { // 가입되지 않은 정보로 로그인 하려고 하면 
+					
+					return "client/member/noinfo";
 				
-				//존재 O : 세션에 회원정보 담아두기
-				HttpSession session=request.getSession();
-				session.setAttribute("member", obj); //현재 클라이언트 요청과 연계된 세션에 보관해 놓는다
-				
-				return "redirect:/";
+				}else {//가입된 정보가 있으면 
+				 
+					//1) 세션 가져오기
+					HttpSession session=request.getSession();
+					session.setAttribute("member", obj); 
+					
+					//2) 세션 유지시간 설정 1800 = 60 * 30 (30 분)
+					session.setMaxInactiveInterval(1800); 
+					
+					return "redirect:/";
+				}
 	}
 	
-	//로그아웃 홈 요청 
+	//로그아웃 
 	@RequestMapping(value="/client/member/logoutform", method=RequestMethod.GET)
 	public ModelAndView getLogoutForm() {
 		ModelAndView mav = new ModelAndView("client/member/logout");
@@ -89,22 +98,33 @@ public class MemberController {
 		return mav;
 	}
 	
-	//로그아웃 요청 처리 
-	@RequestMapping("/client/member/logout")
+	//로그아웃 
+	@RequestMapping(value="/client/member/logout")
+	public String logout(HttpServletRequest request) {
+		request.getSession().invalidate(); //세션 무효화
+		//request.getSession(true); //새로운 세션 아이디 발급
+		
+		
+		return "client/member/logout";
+	}
+	
+	
+	
+	//로그아웃
+/*	@RequestMapping(value="/client/member/logout")
 	public ModelAndView logout(HttpServletRequest request) {
 		
-		request.getSession().invalidate(); //세션 무효화, 이시점부터 담겨진 데이터가 다 무효가 된다
+		request.getSession().invalidate(); //가지고 있는 session을 무효화시킨다. 
 		
 		MessageData messageData = new MessageData();
 		messageData.setResultCode(1);
-		messageData.setMsg("로그아웃 되었습니다");
+		messageData.setMsg("로그아웃 되었습니다.");
 		messageData.setUrl("/");
 		
-		ModelAndView mav = new ModelAndView("/");
-		
+		ModelAndView mav = new ModelAndView("/main");
 		mav.addObject("messageData", messageData);
 		return mav;
-	}
+	}*/
 	
 	@RequestMapping(value="/admin/member/edit", method=RequestMethod.POST)
 	@ResponseBody
@@ -119,7 +139,7 @@ public class MemberController {
 		return sb.toString();
 	}
 	
-	// 회원 탈퇴(delete)
+	// �쉶�썝 �깉�눜(delete)
 	@RequestMapping("/client/member/delete")
 	public String Withdraw(HttpSession session, Member member, RedirectAttributes rttr) throws MemberNotFoundException {
 	 
@@ -128,23 +148,23 @@ public class MemberController {
 	 String oldPass = membervo.getPassword();
 	 String newPass = member.getPassword();
 	     
-	 //회원탈퇴를 위해 입력한 비밀번호와 기존 비밀번호가 일치하는지 비교하기 위해 equals 사용.
-	 //바로 윗줄에서 기존 비밀번호와 입력한 비밀번호를 비교하기 위해 변수를 다르게 적용.
+	 //�쉶�썝�깉�눜瑜� �쐞�빐 �엯�젰�븳 鍮꾨�踰덊샇�� 湲곗〈 鍮꾨�踰덊샇媛� �씪移섑븯�뒗吏� 鍮꾧탳�븯湲� �쐞�빐 equals �궗�슜.
+	 //諛붾줈 �쐵以꾩뿉�꽌 湲곗〈 鍮꾨�踰덊샇�� �엯�젰�븳 鍮꾨�踰덊샇瑜� 鍮꾧탳�븯湲� �쐞�빐 蹂��닔瑜� �떎瑜닿쾶 �쟻�슜.
 	 if(!(oldPass.equals(newPass))) {
 	  rttr.addFlashAttribute("msg", false);
 	  return "redirect:/";
 	 }
 	 
-	 //데이터에서 고객정보 삭제
+	 //�뜲�씠�꽣�뿉�꽌 怨좉컼�젙蹂� �궘�젣
 	 memberService.delete(member);
 	 
-	 //탈퇴와 동시에 로그아웃시키기
+	 //�깉�눜�� �룞�떆�뿉 濡쒓렇�븘�썐�떆�궎湲�
 	 session.invalidate();
 	  
 	 return "redirect:/";
 	}
 	
-	//예외 핸들러 2가지 처리
+	//�삁�쇅 �빖�뱾�윭 2媛�吏� 泥섎━
 	@ExceptionHandler(MemberRegistException.class)
 	@ResponseBody
 	public String handleException(MemberRegistException e) {
@@ -164,7 +184,7 @@ public class MemberController {
 		sb.append("{");
 		sb.append("result:0");
 		sb.append("}");		
-		System.out.println("수정 요청실패"+sb);
+		System.out.println("�닔�젙 �슂泥��떎�뙣"+sb);
 		return sb.toString();
 	}
 	
@@ -175,7 +195,7 @@ public class MemberController {
 		sb.append("{");
 		sb.append("result:0");
 		sb.append("}");		
-		System.out.println("삭제실패"+sb);
+		System.out.println("�궘�젣�떎�뙣"+sb);
 		return sb.toString();
 	}
 
