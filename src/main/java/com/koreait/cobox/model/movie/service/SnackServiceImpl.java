@@ -47,12 +47,32 @@ public class SnackServiceImpl implements SnackService{
 	}
 	//체크된 스낵 삭제하기 
 	@Override
-	public int deleteCheck(FileManager fileManager, HashMap<Object, Object> hashMap) {
+	public int deleteCheck(HashMap<Object, Object> hashMap) {
 		// 해당 id 의 getOriginalFilename 이 path 다 
 		//fileManager.deleteFile(path);
 		
 		
 		return snackDAO.deleteCheckSnack(hashMap);
+	}
+	@Override
+	public int updateSnackused(HashMap<Object, Object> params) {
+		return snackDAO.updateSnackused(params);
+		
+	}
+	@Override
+	public int insertSnackStat(HashMap<Object, Object> params) {
+		return snackDAO.insertSnackStat(params);
+		
+	}
+	@Override
+	public int updateSnackCnt(HashMap<Object, Object> params) {
+		return snackDAO.updateSnackCnt(params);
+		
+	}
+	@Override
+	public List selectSnackStat() {
+		
+		return snackDAO.selectSnackStat();
 	}
 	
 

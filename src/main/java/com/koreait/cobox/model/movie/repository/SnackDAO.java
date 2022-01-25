@@ -10,4 +10,8 @@ public interface SnackDAO {
 	public List<Snack> selectAll();
 	public List<Snack> selectById(int topcategory_id);
 	public int deleteCheckSnack(HashMap<Object,Object>hashMap);
+	public int updateSnackused(HashMap<Object,Object>hashMap);
+	public int insertSnackStat(HashMap<Object,Object>hashMap);
+	public int updateSnackCnt(HashMap<Object,Object>hashMap);
+	public List selectSnackStat();
 }

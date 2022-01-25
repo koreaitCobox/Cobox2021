@@ -10,6 +10,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
 Movie movie=(Movie)request.getAttribute("movie");
+System.out.println(movie);
 //Member member=(Member)request.getAttribute("member");
 %>
 <!DOCTYPE html>
@@ -29,59 +30,68 @@ Movie movie=(Movie)request.getAttribute("movie");
 <script>
 //온로드 하자마자 댓글 가져오기
 $(document).ready(function() {
+	
 	//alert("온로드");
 	$('.comment-form__btn').on("click", function(){
 		console.log('asdasd');
 	});
 	
-});
+	// 댓글 삭제
 
-//예매하기 클릭하면 팝업창 띄우기
-function showPopup(){
-	
-	
-}
+});//docuemnt ready end
 
-
-//댓글 목록 가져오기
-function getCommentsList(){
+function del_click(_this){
+	var del_id = _this.id;
 	
-	$.ajax({
-		url:"/client/comments/list",
-		type:"get",
-		data:{
-			movie_id:<%=movie.getMovie_id()%>
-		},
-		success:function(result){
-			console.log(result);
+	if(confirm("삭제하시겠습니까?")){
+		var seq = del_id.replace('bin_','');
+		var movie_id=<%=movie.getMovie_id()%>
+		var params = {
+				checkedSeqs : seq,
+				movie_id : movie_id
+		};
+		
+		$.ajax({
+			type : 'POST',
+			url : '/client/comments/delete',
+			data : params,
+			success : function(result){
+				
+				var htmlStr = '';
+				$.each(result, function(idx, obj){
+					
+					htmlStr += '<div class="comment-sets">';
+					htmlStr += '<div class="comment">';
+					htmlStr += '<div class="comment__images">';
+					htmlStr += '<img src="/resources/images/comment/avatar.jpg">'; 
+					htmlStr += '</div>';
+					htmlStr += '<div class="msg">';
+					htmlStr += obj.msg;
+					htmlStr += '</div>';
+					htmlStr += '<div class="btn_cont">';
+					htmlStr += '<button class="btn-1 bnt-outline-danger del-icon" onclick="del_click(this);" id="bin_'+obj.comments_id+'">'
+					htmlStr += '<span class="fa fa-trash-o"></span>'
+					htmlStr += '</button>';
+					htmlStr += '<button class="btn-1 bnt-outline-success" id="det_'+obj.comments_id+'">'
+					htmlStr += '<span class="fa fa-pencil"></span>'
+					htmlStr += '</button>'
+					htmlStr += '</div>'
+					htmlStr += '</div>';
+					htmlStr += '</div>';
+				});
+					$('.comm_container').empty().append(htmlStr);
+				
+				},
+			error: function(e){
+				alert('댓글삭제 오류');
+			}
 			
-			var htmlStr = '';
-			$.each(result, function(idx, obj){
-				htmlStr += '<div class="comment-sets">';
-				htmlStr += '<div class="comment">';
-				htmlStr += '<div class="comment__images">';
-				/* htmlStr += '<img alt='' src=\"/resources/images/comment/avatar.jpg\">'; */
-				htmlStr += '</div>';
-				htmlStr += '<div class="msg">';
-				htmlStr += obj.msg;
-				htmlStr += '</div>';
-				htmlStr += '</div>';
-				htmlStr += '</div>';
-			});
-			$('.m_detail tbody').empty().append(htmlStr);
-		}
-	});
+		});
+		
+	}
 }
-
-//if(session.getAttribute("member")==null
-//이면 "로그인을 해주세요"
-
-//else if()!=null
-//이면 "댓글등록"
-
-//댓글등록 요청
 function registComment(){
-	console.log('asd');
+	
 	var msg=$("textarea[name='msg']").val();
 	var movie_id=<%=movie.getMovie_id()%>
 	
@@ -96,14 +106,34 @@ function registComment(){
 		type:"post",
 		data:params,
 		success:function(result){
-			alert("받은 결과"+result);
-			$('textarea').val('');
-			if(result==1){// result 를 잘 받아왔다면, 
-				getCommentsList(); 
-			}else{ 
-				getCommentsList(); 
-			}
-		},
+			
+			/* alert("받은 결과"+result); */
+			$('textarea').val(''); // 후기 작성 폼 clear
+			var htmlStr = '';
+			$.each(result, function(idx, obj){
+				console.log(result);
+				htmlStr += '<div class="comment-sets">';
+				htmlStr += '<div class="comment">';
+				htmlStr += '<div class="comment__images">';
+				htmlStr += '<img src="/resources/images/comment/avatar.jpg">'; 
+				htmlStr += '</div>';
+				htmlStr += '<div class="msg">';
+				htmlStr += obj.msg;
+				htmlStr += '</div>';
+				htmlStr += '<div class="btn_cont">';
+				htmlStr += '<button class="btn-1 bnt-outline-danger del-icon" onclick="del_click(this);" id="bin_'+obj.movie_id+'">'
+				htmlStr += '<span class="fa fa-trash-o"></span>'
+				htmlStr += '</button>';
+				htmlStr += '<button class="btn-1 bnt-outline-success" id="det_'+obj.movie_id+'">'
+				htmlStr += '<span class="fa fa-pencil"></span>'
+				htmlStr += '</button>'
+				htmlStr += '</div>'
+				htmlStr += '</div>';
+				htmlStr += '</div>';
+			});
+			$('.comm_container').empty().append(htmlStr);
+			
+			},
 		error: function(e){
 			alert('댓글등록 오류');
 		}
@@ -174,7 +204,7 @@ function registComment(){
 						<input type="button" class="btn btn-md btn--danger comment-form__btn"  onclick="registComment();" value="댓글등록">
 					</form>
 				</div>	
-				<tbody>
+				<div class="comm_container">
 					<div class="comment-sets">
 					<c:forEach items="${commentsList}" var="commentsList">
 						<div class="comment">
@@ -182,12 +212,22 @@ function registComment(){
 								<img alt='' src="/resources/images/comment/avatar.jpg">
 							</div>
 							<div class="msg">
+								<span>${commentsList.member.name}</span>
 								${commentsList.msg}
+							</div>
+							<div class="btn_cont">
+								<button class="btn-1 bnt-outline-danger del-icon" onclick="del_click(this);" id="bin_${commentsList.comments_id}">
+									<span class="fa fa-trash-o"></span>
+								</button>
+								<button class="btn-1 bnt-outline-success" id="det_${commentsList.comments_id}">
+									<span class="fa fa-pencil"></span>
+								</button>
 							</div>
 						</div>
 					</c:forEach>
 				 </div>
-			 </tbody>
+				 </div>
+			 
 			<div class="comment-more">
 				<a href="#" class="watchlist">Show more comments</a>
 			</div>

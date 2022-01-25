@@ -3,6 +3,7 @@
 <html>
 <head>
 <%@ include file="../inc/header.jsp"%>
+
 </head>
 <style>
 </style>
@@ -23,6 +24,14 @@ $(document).on('click', '.number-spinner button', function () {
    }
    btn.closest('.number-spinner').find('input').val(newVal);
 });
+
+
+//초기 차트 생성
+function chartInit(){
+	var ctx = document.getElementById('myChart').getContext('2d');
+	stat.myChart = new Chart(ctx, stat.chartConfig); // 초기생성
+}
+
 </script>
 <body class="single-cin"> 
     <div class="wrapper">
@@ -109,14 +118,11 @@ $(document).on('click', '.number-spinner button', function () {
                   </div>
             </div>
             </div>
+            
         </section>
             <%@include file="../inc/footer.jsp"%>
         </div>
         <%@include file="../inc/script.jsp"%>
-      <script type="text/javascript">
-            $(document).ready(function() {
-                init_MovieList();
-            });
-      </script>
+     
 </body>
 </html>

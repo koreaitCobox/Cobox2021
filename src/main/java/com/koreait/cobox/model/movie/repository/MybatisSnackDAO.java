@@ -36,5 +36,27 @@ public class MybatisSnackDAO implements SnackDAO{
 		
 		return sqlSessionTemplate.delete("Snack.deleteCheckSnack",hashMap);
 	}
+	@Override
+	public int updateSnackused(HashMap<Object, Object> hashMap) {
+		
+		return sqlSessionTemplate.update("Snack.updateSnack", hashMap);
+		
+	}
+	@Override
+	public int insertSnackStat(HashMap<Object, Object> hashMap) {
+		
+		return sqlSessionTemplate.insert("Snack.insertSnackStat",hashMap);
+		
+	}
+	@Override
+	public int updateSnackCnt(HashMap<Object, Object> hashMap) {
+		
+		return sqlSessionTemplate.update("Snack.updateSnackCnt",hashMap);
+	}
+	@Override
+	public List selectSnackStat() {
+		
+		return sqlSessionTemplate.selectList("Snack.selectSnackStat");
+	}
 
 }

@@ -18,6 +18,8 @@
 		<typeAlias type="com.koreait.cobox.model.domain.Snack" alias="Snack"/>
 		<typeAlias type="com.koreait.cobox.model.domain.Schedule" alias="Schedule"/>
 		<typeAlias type="com.koreait.cobox.model.domain.PSummary" alias="PSummary"/>
+		<typeAlias type="com.koreait.cobox.model.domain.Admin" alias="Admin"/>
+		<typeAlias type="com.koreait.cobox.model.domain.Snack_stat" alias="Snack_stat"/>
 	</typeAliases>
 	<mappers>
 		<mapper resource="com/koreait/cobox/mybatis/mapper/GenreMapper.xml"/>
@@ -30,6 +32,7 @@
 		<mapper resource="com/koreait/cobox/mybatis/mapper/RatingMapper.xml"/>
 		<mapper resource="com/koreait/cobox/mybatis/mapper/SnackMapper.xml"/>
 		<mapper resource="com/koreait/cobox/mybatis/mapper/ScheduleMapper.xml"/>
+		<mapper resource="com/koreait/cobox/mybatis/mapper/LoginMapper.xml"/>
 	</mappers>
 
 </configuration>

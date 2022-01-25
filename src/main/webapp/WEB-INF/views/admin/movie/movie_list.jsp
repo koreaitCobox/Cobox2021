@@ -297,7 +297,7 @@ function regist() {
 					<tbody>
 						<tr>
 							<th scope="row">영화명</th>
-							<td><input type="text" id="movie_name" name="movie_name" class="inputarea_name" value=""></td>
+							<td><input type="text" id="movie_name" name="movie_name" class="inputarea_name " value=""></td>
 							<th scope="row">감독</th>
 							<td><input type="text" id="director" name="director" class="" value=""></td>
 						</tr>
@@ -307,7 +307,7 @@ function regist() {
 							<th scope="row">개봉일</th>
 							<td><label for="relday" class="datepickerWrap">
                                     <span class="blind">개봉일</span>
-                                    <input type="text" id="relday" name="relday" onkeyup="auto_date_format( event, this );"  class="input cal_input"
+                                    <input type="text" id="relday" name="relday" onkeyup="auto_date_format( event, this );"  class="input cal_input "
                                            value="" readonly>
 								</label></td>
 						</tr>

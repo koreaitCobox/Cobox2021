@@ -198,8 +198,16 @@ public class AdminMovieController implements ServletContextAware{
 	   return mav;
    }
    
-   
-   //영화등록
+	/**
+	 * 
+	 * @MethodName : registMovie
+	 * @Author : Suyeon Kim
+	 * @Date : 2022. 01. 07.
+	 * @Description : 영화 등록
+	 * @param movie
+	 * @return
+	 */
+
    @RequestMapping(value="/admin/movie/regist",method=RequestMethod.POST, produces="text/html;charset=utf8")
    @ResponseBody
    public String registMovie(Movie movie) {

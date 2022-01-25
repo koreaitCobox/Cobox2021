@@ -1,3 +1,4 @@
+<%@page import="com.koreait.cobox.model.domain.Snack"%>
 <%@page import="com.koreait.cobox.model.common.Pager"%>
 <%@page import="com.koreait.cobox.model.domain.Location"%>
 <%@page import="com.koreait.cobox.model.domain.Genre"%>
@@ -7,17 +8,16 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%-- <%
-// List<Movie> movieList = (List)request.getAttribute("movieList");
-//out.print("movieList의 사이즈"+movieList.size());
-Pager pager=(Pager)request.getAttribute("pager");
-List<Movie>movieList=(List)pager.getList();
-System.out.println(movieList);
-%> --%>
+
+<%
+List<Snack> snackList = (List)request.getAttribute("snackList");
+
+%> 
 <!DOCTYPE html>
 <html>
 <head>
 <%@ include file="../inc/header.jsp"%>
+<script type="text/javascript" src="./chart.js"></script>
 <script src="http://code.jquery.com/jquery-1.4.4.min.js"></script>
 <script>
  $(document).ready(function() {
@@ -102,7 +102,7 @@ $('#btn_close').click(function(){
 					var box_price = data.box_price;
 					var htmlStr='';
 					
-					htmlStr += '<input type="text" value="'+box_price+' 원" readonly>'
+					htmlStr += '<input type="text" value="'+box_price+' 원" class="text_box" readonly>'
 					$('#box_price').empty().append(htmlStr);
 					
 				}
@@ -138,15 +138,21 @@ $(".gnb_m1").on("click","li",function(){
 					$.each(snackList, function(idx,obj){
 					
 					htmlStr+='<div class="snack_card">';
-					htmlStr+='<img src="/resources/data/'+obj.snack_id+'.'+obj.filename+'">';
+					if(obj.used_fl.indexOf('Y')==-1){//만약 품절등록 되있으면 
+						htmlStr+='<img src="https://eventimg.auction.co.kr/md/auction/08A7AD0E8F/soldout_col3.png?ver=0.2" id="img_'+obj.snack_id+'"/>'
+					}else{
+						htmlStr+='<img src="/resources/data/'+obj.snack_id+'.'+obj.filename+'">';
+					}
 					htmlStr+='<div class="s_detail">';
 					htmlStr+='<span>'+obj.snack_name+'</span></br>';
 					htmlStr+='<span>'+obj.detail+'</span>';
 					htmlStr+='<div class="updown">';
 					htmlStr+='<span>수량 : </span>';
-					htmlStr+='<span id = "numberUpDown" class="'+obj.snack_id+'">0</span>';					
-					htmlStr+='<a href="#" onclick="inc_dec(\'inc\','+obj.snack_id+')" id="increaseQuantity class="'+obj.snack_id+'_in">▲</a>';
-					htmlStr+='<a href="#" onclick="inc_dec(\'dec\','+obj.snack_id+');" id="decreaseQuantity class="'+obj.snack_id+'_de">▼</a>';
+					htmlStr+='<span id = "numberUpDown" class="'+obj.snack_id+'">0</span>';
+					if(obj.used_fl.indexOf('Y')!=-1){//만약 품절등록 되있으면 
+						htmlStr+='<a href="#" onclick="inc_dec(\'inc\','+obj.snack_id+')" id="increaseQuantity class="'+obj.snack_id+'_in">▲</a>';
+						htmlStr+='<a href="#" onclick="inc_dec(\'dec\','+obj.snack_id+');" id="decreaseQuantity class="'+obj.snack_id+'_de">▼</a>';
+					}
 					htmlStr+='</div>';
 					htmlStr+='<div class="sum"><span class="'+obj.snack_id+'_p" >0원</span></div>';
 					htmlStr+='<input type="hidden" id="'+obj.snack_id+'_price" value="'+obj.price+'">'
@@ -163,7 +169,43 @@ $(".gnb_m1").on("click","li",function(){
 
 // schedule에 데이터 insert 하고  pay 페이지로 이동
 $('#btn_pay').click(function(){
-	if(window.confirm('결제하시겠습니까?')){
+	
+	<%for(int i=0;i<snackList.size();i++){%> 
+		var snack_id = <%=snackList.get(i).getSnack_id()%>;	
+		if($('.'+snack_id).text()>0){ // 1개 이상 구매 할 때 insert 및 update  
+			//console.log(snack_id +'::'+ $('.'+snack_id).text());
+			var sales_amount  = $('.'+snack_id).text();
+			
+			var params = {
+				snack_id : snack_id,
+				sales_amount : sales_amount
+			}
+			
+			// 스낵 통계 insert  해당 snack에 대한 데이터가 이미 있으면 
+			$.ajax({
+				type:'POST',
+				url:'/client/snack/insertSnackStat',
+				dataType:'json',
+				data:params,
+				success:function(data){
+					console.log('insert의 결과 : ' + data); // 데이터가 이미 있어서 insert가 안되면 0
+				}
+			});
+			
+			// 스낵 판매량 update 
+			$.ajax({
+				type:'POST',
+				url:'/client/snack/updateSnackCnt',
+				dataType:'json',
+				data:params,
+				success:function(data){
+					console.log('update의 결과 : ' + data); // update 성공 시 1
+				}
+			});
+		}
+	<%}%>
+	
+	 if(window.confirm('결제하시겠습니까?')){
 		//네
 		var _total_price=$('#boxsnack_pri').text();
 		var regax = /[^0-9]/g;
@@ -178,6 +220,7 @@ $('#btn_pay').click(function(){
 			  total_price : _total_price.replace(regax, "") // 숫자만 추출하기 
 		
 		};
+		
 		$.ajax({
 			type : 'POST',
 			url : '/client/movie/pay',
@@ -188,12 +231,13 @@ $('#btn_pay').click(function(){
 				//결제페이지로 넘기기
 				location.href = "/client/movie/payPage?member_id="+params.member_id;
 			}
-		});
-	}
+		}); // ajax end
+		
+	}//window confirm end 
 
 	
-});
-
+}); 
+ 
 }); //document ready end
 
  
@@ -391,15 +435,8 @@ function direct_reserve(movieList){
 	    		overlay:{ opacity: 0., background: '#000000'},
 	    	});	    	
 	    }
-	 
 
-	 
-	 
-	 
-	 
 } //팝업창 function end 
-
-
 
 
 
@@ -434,7 +471,7 @@ function direct_reserve(movieList){
      						</select>
      						</label>
      						<label for="search_text01"><span class="blind">검색어</span>
-     							<input type="text" id="search_text01 search" class="search_input1" name="search" value="${search}">
+     							<input type="text" id="search_text01 search" class="search_input1 text_box" name="search" value="${search}">
      						</label>
      					</td>
      				</tr>
@@ -442,7 +479,7 @@ function direct_reserve(movieList){
      					<th scope="row">예매날짜</th>
      					<td><label for="datepicker" class="datepicker">
      						<span class="blind"></span>
-     						<input type="text" id="datepicker" class="datepicker" readonly>
+     						<input type="text" id="datepicker" class="datepicker text_box" readonly>
      					</label>
      					</td>
      					<th scope="row">박스명 / 가격</th>
@@ -451,7 +488,7 @@ function direct_reserve(movieList){
 	     						<option value="" id="">전체</option>
      						</select>
      						<label for="search_sel02" id="box_price">
-     							<input type="text" value="가격" readonly>
+     							<input type="text" value="가격" class="text_box" readonly>
      						</label>
      					</td>
      				</tr>
@@ -534,7 +571,7 @@ function direct_reserve(movieList){
 					                 <li>
 					                    <label>이용날짜</label>
 					        			<span class="calendar">
-					                        <input type="text"  id="use_date" class="dataPick" readonly style="width:120px;"/>
+					                        <input type="text"  id="use_date" class="dataPick text_box" readonly style="width:120px;"/>
 					                    </span>
 					                </li>
 									<li>
@@ -587,6 +624,7 @@ function direct_reserve(movieList){
 								</div>
 							</div> 
 					</section>
+					
 				</div>  <!--  -->	
             
                 

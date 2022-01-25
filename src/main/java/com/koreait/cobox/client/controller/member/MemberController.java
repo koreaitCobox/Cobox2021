@@ -29,14 +29,28 @@ public class MemberController {
 	@Autowired
 	private MemberService memberService;
 		
-	//회원가입 
+	/**
+	 * @Method : getRegistForm
+	 * @Author : Suyeon Kim
+	 * @Date : 2022. 01. 11.
+	 * @Description : 사용자 회원가입 페이지
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value="/client/member/join", method=RequestMethod.GET)
 	public ModelAndView getRegistForm(HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView("client/member/join");
 		return mav;
 	}
 
-	//회원가입(insert)
+	/**
+	 * @Method : getRegistForm
+	 * @Author : Suyeon Kim
+	 * @Date : 2022. 01. 11.
+	 * @Description : 사용자 회원 등록 
+	 * @param member : 사용자 VO
+	 * @return
+	 */
 	@RequestMapping(value="/client/member/regist", method=RequestMethod.POST, produces="text/html;charset=utf-8")
 	@ResponseBody
 	public String regist(Member member) {
@@ -60,45 +74,74 @@ public class MemberController {
 		return sb.toString();
 	} 
 	
-	//濡쒓렇�씤 �솃 �슂泥� 
+	/**
+	 * @Method : getLoginForm
+	 * @Author : Suyeon Kim
+	 * @Date : 2022. 01. 11.
+	 * @Description : 사용자 로그인 페이지 
+	 * @param member : 사용자 VO
+	 * @return
+	 */
 	@RequestMapping(value="/client/member/formtable", method=RequestMethod.GET)
-	public ModelAndView getLoginForm() {
-		ModelAndView mav = new ModelAndView("client/member/login");
+	public String getLoginForm() {
 		
-		return mav;
+		
+		return "client/member/login";
 	}
 	
-	//회원 로그인━(select)
+	/**
+	 * @Method : login
+	 * @Author : Suyeon Kim
+	 * @Date : 2022. 01. 11.
+	 * @Description : 사용자 로그인 
+	 * @param member : 사용자 VO
+	 * @param request  
+	 * @return
+	 */
 	@RequestMapping(value="/client/member/login", method=RequestMethod.POST)
 	public String login(Member member, HttpServletRequest request) {
 		
-				Member obj=memberService.select(member);
-				if(obj == null) { // 가입되지 않은 정보로 로그인 하려고 하면 
-					
-					return "client/member/noinfo";
-				
-				}else {//가입된 정보가 있으면 
-				 
-					//1) 세션 가져오기
-					HttpSession session=request.getSession();
-					session.setAttribute("member", obj); 
-					
-					//2) 세션 유지시간 설정 1800 = 60 * 30 (30 분)
-					session.setMaxInactiveInterval(1800); 
-					
-					return "redirect:/";
-				}
-	}
-	
-	//로그아웃 
-	@RequestMapping(value="/client/member/logoutform", method=RequestMethod.GET)
-	public ModelAndView getLogoutForm() {
-		ModelAndView mav = new ModelAndView("client/member/logout");
+		Member obj=memberService.select(member);
+		if(obj == null) { // 가입되지 않은 정보로 로그인 하려고 하면 
+			
+			return "client/member/noinfo";
 		
-		return mav;
+		}else {//가입된 정보가 있으면 
+		 
+			//1) 세션 가져오기
+			HttpSession session=request.getSession();
+			session.setAttribute("member", obj); 
+			
+			//2) 세션 유지시간 설정 1800 = 60 * 30 (30 분)
+			session.setMaxInactiveInterval(1800); 
+			
+			return "redirect:/";
+		}
 	}
 	
-	//로그아웃 
+	
+	/**
+	 * @Method : getLogoutForm
+	 * @Author : Suyeon Kim
+	 * @Date : 2022. 01. 11.
+	 * @Description : 사용자 로그아웃 페이지
+	 * @param member : 사용자 VO
+	 * @return
+	 */
+	@RequestMapping(value="/client/member/logoutform", method=RequestMethod.GET)
+	public String getLogoutForm() {
+	
+		return "client/member/logout";
+	}
+	
+	/**
+	 * @Method : logout
+	 * @Author : Suyeon Kim
+	 * @Date : 2022. 01. 11.
+	 * @Description : 사용자 로그아웃
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value="/client/member/logout")
 	public String logout(HttpServletRequest request) {
 		request.getSession().invalidate(); //세션 무효화
@@ -108,24 +151,14 @@ public class MemberController {
 		return "client/member/logout";
 	}
 	
-	
-	
-	//로그아웃
-/*	@RequestMapping(value="/client/member/logout")
-	public ModelAndView logout(HttpServletRequest request) {
-		
-		request.getSession().invalidate(); //가지고 있는 session을 무효화시킨다. 
-		
-		MessageData messageData = new MessageData();
-		messageData.setResultCode(1);
-		messageData.setMsg("로그아웃 되었습니다.");
-		messageData.setUrl("/");
-		
-		ModelAndView mav = new ModelAndView("/main");
-		mav.addObject("messageData", messageData);
-		return mav;
-	}*/
-	
+	/**
+	 * @Method : edit
+	 * @Author : Suyeon Kim
+	 * @Date : 2022. 01. 11.
+	 * @Description : 사용자 정보 수정
+	 * @param member : 사용자 VO
+	 * @return
+	 */
 	@RequestMapping(value="/admin/member/edit", method=RequestMethod.POST)
 	@ResponseBody
 	public String edit(Member member) {

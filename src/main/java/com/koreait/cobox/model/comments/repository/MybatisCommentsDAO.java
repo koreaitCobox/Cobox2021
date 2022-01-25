@@ -34,4 +34,10 @@ public class MybatisCommentsDAO implements CommentsDAO{
 		
 	}
 
+	@Override
+	public int deleteComment(int comments_id) {
+
+		return sqlSessionTemplate.delete("Comments.deleteComment", comments_id);
+	}
+
 }

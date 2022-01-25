@@ -18,9 +18,11 @@ import com.koreait.cobox.model.domain.Comments;
 import com.koreait.cobox.model.domain.Movie;
 import com.koreait.cobox.model.domain.PSummary;
 import com.koreait.cobox.model.domain.Schedule;
+import com.koreait.cobox.model.domain.Snack;
 import com.koreait.cobox.model.movie.repository.MovieDAO;
 import com.koreait.cobox.model.movie.service.MovieService;
 import com.koreait.cobox.model.movie.service.ScheduleService;
+import com.koreait.cobox.model.movie.service.SnackService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -41,11 +43,25 @@ public class MainController {
 	@Autowired
 	private MovieService movieService;
 	@Autowired
+	private SnackService snackService;
+	@Autowired
 	private MovieDAO movieDAO;
 	@Autowired
 	private Pager pager;
 	@Autowired
 	private CommentsService commentsService;
+	
+	
+	/**
+	 * @Method : main
+	 * @Author : Suyeon Kim
+	 * @Date : 2022. 01. 11.
+	 * @Description : 사용자 메인
+	 * @param request
+	 * @param session
+	 * @param model
+	 * @return
+	 */
 	
 	@RequestMapping(value="/")
 	public ModelAndView main(HttpServletRequest request, ModelMap model, HttpSession session) {
@@ -61,19 +77,16 @@ public class MainController {
 		
 	}
 	
-	
-	@RequestMapping(value = "/client/movie/reservation", method = RequestMethod.GET)
-	public String reservation() {
-		
-		return "client/movie/reservation";
-	}
-	
-	@RequestMapping(value = "/client/movie/reservation2", method = RequestMethod.GET)
-	public String reservation2() {
-		
-		return "client/movie/reservation2";
-	}
-	//결제 페이지 보여주기 
+	/**
+	 * @Method : getPayPage1
+	 * @Author : Suyeon Kim
+	 * @Date : 2022. 01. 11.
+	 * @Description : 사용자 결제 페이지
+	 * @param request
+	 * @param session
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value="/client/movie/payPage")
 	public String getPayPage1(	@RequestParam(value="member_id", required=false, defaultValue = "") int member_id,
 			HttpServletRequest request, ModelMap model,HttpSession session) {
@@ -84,8 +97,23 @@ public class MainController {
 			return "client/movie/payPage";
 	}
 	
+	/**
+	 * @Method : getPayPage
+	 * @Author : Suyeon Kim
+	 * @Date : 2022. 01. 11.
+	 * @Description : '결제하기' 버튼 클릭시 스케줄 insert
+	 * @param member_id : 회원 일련번호
+	 * @param box_id : 영화관 일련번호
+	 * @param time_table_id : 영화 시간표
+	 * @param movie_id : 영화 일련번호
+	 * @param use_day : 사용일자
+	 * @param total_price : 총 금액
+	 * @param	 request
+	 * @param response
+	 * @param session
+	 * @return
+	 */
 	
-	// 결제하기 눌렀을 때 Schedule 에 정보 입력
 	@RequestMapping(value = "/client/movie/pay", method = RequestMethod.POST)
 	public @ResponseBody int getPayPage(
 			@RequestParam(value = "member_id", required = false, defaultValue = "") int member_id,
@@ -110,7 +138,20 @@ public class MainController {
 		return result;
 	}
 	
-	//최종 결제 눌렀을 때 요약테이블에 insert 
+
+		/**
+		 * @Method : insertPaySummary
+		 * @Author : Suyeon Kim
+		 * @Date : 2022. 01. 11.
+		 * @Description : 최종결제 시 요약 테이블에 insert
+		 * @param schedule_id : 스케줄 일련번호
+		 * @param p_method_id : 스케줄 요약 일련번호
+		 * @param total_price : 전체 가격
+		 * @param request 
+		 * @param response
+		 * @param session
+		 * @return
+		 */
 		@RequestMapping(value = "/client/movie/payfinal", method = RequestMethod.POST)
 		public @ResponseBody void insertPaySummary(
 				@RequestParam(value = "schedule_id", required = false, defaultValue = "") int schedule_id,
@@ -128,7 +169,18 @@ public class MainController {
 		}
 		
 	
-	//조건검색 영화목록
+	/**
+	 * @Method : list
+	 * @Author : Suyeon Kim
+	 * @Date : 2022. 01. 11.
+	 * @Description : 페이지 init 시 영화목록 
+	 * @param searchSelect : 검색 조건
+	 * @param search : 검색어
+	 * @param request 
+	 * @param response
+	 * @param session
+	 * @return
+	 */
 	@RequestMapping(value = "/client/movie/list")
 	public String list(@RequestParam(value="searchSelect", defaultValue="all") String searchSelect,
 			@RequestParam(value = "search", required = false, defaultValue = "") String search,
@@ -162,7 +214,7 @@ public class MainController {
 		 System.out.println(params);
 		 
 		 List<Movie> movieList = movieService.selectAll(params);
-		 
+		 List<Snack> snackList = snackService.selectAll();
 		 
 		 model.addAttribute("pageMaker", pageMaker);
 		 model.addAttribute("search",search);
@@ -174,6 +226,7 @@ public class MainController {
 		 model.addAttribute("movieList",movieList);
 		 model.addAttribute("searchSelect",searchSelect);
 		 model.addAttribute("searchValues",params);
+		 model.addAttribute("snackList",snackList);
 		
 		} catch (NumberFormatException e) {
 			// LOG.error(e.getMessage());
@@ -185,18 +238,19 @@ public class MainController {
 		 return "client/movie/movielist";
 	}
 	
-	//영화목록 들어갔을 때 
-/*	@RequestMapping(value = "/client/movie/list")
-	public String getStatisticsList(HttpServletRequest request, HttpServletResponse response, ModelMap model,
-			HttpSession session) {
-
-		return "client/movie/movielist";
-	}*/
-	
-	
-	
-	
-	//조건검색 영화목록
+	/**
+	 * @Method : list
+	 * @Author : Suyeon Kim
+	 * @Date : 2022. 01. 11.
+	 * @Description : 조건 검색 시 영화 목록
+	 * @param selNum : 한 페이지 당 리스트 수
+	 * @param pageSize : 한 페이지당 보이는 총 페이지 수  
+	 * @param page : 현재 페이지
+	 * @param request 
+	 * @param response
+	 * @param session
+	 * @return
+	 */
 		@RequestMapping(value = "/client/movie/ajaxList", method=RequestMethod.POST)
 		public @ResponseBody HashMap<Object,Object> list(@RequestParam(value="selNum",required=false, defaultValue = "10") String selNum,
 				@RequestParam(value = "pageSize") int pageSize, @RequestParam(value = "page") int page,
@@ -204,7 +258,7 @@ public class MainController {
 				@RequestParam(value = "search", required = false, defaultValue = "") String search,
 		HttpServletRequest request, ModelMap model, HttpSession session) {
 			
-	
+			
 			HashMap<Object,Object> params = new HashMap<Object,Object>();
 			HashMap<Object,Object> resultMap = new HashMap<Object,Object>();
 			
@@ -218,7 +272,6 @@ public class MainController {
 			 List<Movie> movieList = movieService.selectAll(params);
 			 PageMaker pageMaker = new PageMaker(page,pageSize);
 		
-			 System.out.println("movieList길이:" + movieList.size());
 			 
 			 resultMap.put("pageMaker",pageMaker);
 			 resultMap.put("movieList",movieList);
@@ -226,33 +279,33 @@ public class MainController {
 			 resultMap.put("searchSelect",searchSelect);
 			 resultMap.put("searchValues", params);
 			 resultMap.put("page",page);
-			 //resultMap.put("selNum",pageSize);
-			 //resultMap.put("pageSize", pageSize);
+			 
 			 
 			
 			 return resultMap;
 		}
-/*	//영화목록1 next page
-	@RequestMapping(value="/client/movie/list1",method=RequestMethod.GET)
-	public ModelAndView list1() {
-		ModelAndView mav=new ModelAndView("client/movie/movielist2");
-		List movieList = movieService.selectAll();
-		
-		mav.addObject("movieList",movieList);
-		
-		return mav;
-	}*/
+
 
 	
-	//영화 상세정보
+	/**
+	 * @Method : detail
+	 * @Author : Suyeon Kim
+	 * @Date : 2022. 01. 11.
+	 * @Description : 영화 목록 클릭 시 세부사항 
+	 * @param movie_id : 영화 일련번호
+	 * @param request 
+	 * @param response
+	 * @param session
+	 * @return
+	 */
 	
 	@RequestMapping(value = "/client/movie/detail", method = RequestMethod.GET)
 	public ModelAndView detail(int movie_id, HttpServletRequest request) {
+		
 		logger.debug("movie_id"+movie_id);
 		Movie movie=movieDAO.selectById(movie_id);
-		//Movie movie=movieService.select(movie_id);
-		List<Comments>commentsList = commentsService.selectAll(movie_id);
 		
+		List<Comments>commentsList = commentsService.selectAll(movie_id);
 		ModelAndView mav=new ModelAndView();
 			
 		mav.addObject("movie",movie);
@@ -260,12 +313,13 @@ public class MainController {
 		mav.setViewName("client/movie/moviedetail");
 		return mav;
 	}
-	
-	@RequestMapping(value="/client/movie/detail1",method=RequestMethod.POST)
+
+/*	@RequestMapping(value="/client/movie/detail1",method=RequestMethod.POST)
 	public String edit(Movie movie) {
 		movieDAO.update(movie);
+		
 		return "redirect:/client/detail?movie_id="+movie.getMovie_id();
-	}
+	}*/
 	
 	
 	@RequestMapping(value = "/client/movie/snack", method = RequestMethod.GET)
@@ -285,7 +339,13 @@ public class MainController {
 		return "client/movie/noticedetail";
 	}
 	
-	//박스명 가져오기
+	/**
+	 * @Method : getBoxList
+	 * @Author : Suyeon Kim
+	 * @Date : 2022. 01. 11.
+	 * @Description : 영화관 박스명 가져오기   
+	 * @return
+	 */
 	@RequestMapping(value="/client/movie/getBoxList", method=RequestMethod.POST)
 	public @ResponseBody HashMap<Object,Object> getBoxList(){
 		
@@ -297,15 +357,33 @@ public class MainController {
 		return resultMap;
 	}
 	
-	//박스 가격 가져오기
+	
+	/**
+	 * @Method : getBoxList
+	 * @Author : Suyeon Kim
+	 * @Date : 2022. 01. 11.
+	 * @Description : 영화관 박스가격 가져오기 
+	 * @param box_id 영화 일련번호 
+	 * @return
+	 */
+	
 	@RequestMapping(value="/client/movie/getBoxPrice", method=RequestMethod.POST)
 	public @ResponseBody Box getBoxPrice(int box_id){
+		
 		logger.debug("box_id:" + box_id);
 		Box box=movieDAO.getBoxPrice(box_id);
+		
 		return box;
 	}
 	
-	//영화 한건 가져오기
+	/**
+	 * @Method : getMovieById
+	 * @Author : Suyeon Kim
+	 * @Date : 2022. 01. 11.
+	 * @Description : 영화 한건 가져오기 
+	 * @param box_id 영화 일련번호 
+	 * @return
+	 */
 	@RequestMapping(value="/client/movie/getM", method=RequestMethod.POST)
 	public @ResponseBody Movie getMovieById(@RequestParam(value = "movie_id") int movie_id){
 		

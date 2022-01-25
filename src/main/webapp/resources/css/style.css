@@ -121,17 +121,11 @@ abbr[title] {
 /**
  * Prevent the duplicate application of `bolder` by the next rule in Safari 6.
  */
-b,
-strong {
-  font-weight: inherit;
-}
+
 /**
  * Add the correct font weight in Chrome, Edge, and Safari.
  */
-b,
-strong {
-  font-weight: bolder;
-}
+
 /**
  * 1. Correct the inheritance and scaling of font size in all browsers.
  * 2. Correct the odd `em` font sizing in all browsers.
@@ -10401,9 +10395,17 @@ ul#navigation li.mega-menu__nav-item:hover:before {
 .btn_search{width:72px; height:34px; background:#4f5f6f; border:1px solid #304151; color:#fff; font-size:14px; font-weight:400; line-height:30px; text-align:center; vertical-align:middle;}
 
 
-.search_select{width:100px;}
+.search_select{width:100px;
+    height: 30px;
+    padding: 0.4125em 0.4125em;
+    font-family: inherit;
+    color: #40505f;
+    border: 1px solid #d2d8e0;
+    border-radius: 0px;
+    background: url(../images/select_bg.png) right 0 no-repeat;
+    appearance: none;}
 input[type="text"].tel_num{width:60px;}
-.search_input1[type="text"]{width:60%;}
+.search_input1[type="text"]{border: 1px solid #d2d8e0;border-radius: 0;width:70%;}
 .blind{display:none !important;}
 
 
@@ -10421,7 +10423,7 @@ input[type="text"].tel_num{width:60px;}
 #reserve_popup {
     width:800px;
     height:650px;
-    background:#ededed;
+    background:#ffffff;
     padding:10px;
 }
 .movie__images1{
@@ -10485,7 +10487,7 @@ input[type="text"].tel_num{width:60px;}
 		    color: #40505f;
 		    border: 1px solid #d2d8e0;
 		    border-radius: 0px; 
-		    background: url(../../../resources/images/select_bg.png) right 0 no-repeat;
+		    background: url(../images/select_bg.png) right 0 no-repeat;
 		    -moz-appearance: none;
 		    appearance: none; 
 }
@@ -10497,7 +10499,7 @@ input[type="text"].tel_num{width:60px;}
 		    color: #40505f;
 		    border: 1px solid #d2d8e0;
 		    border-radius: 0px; 
-		    background: url(../../../resources/images/select_bg.png) right 0 no-repeat;
+		    background: url(../images/select_bg.png) right 0 no-repeat;
 		    -moz-appearance: none;
 		    appearance: none; 
 }
@@ -10526,12 +10528,13 @@ body {
     font-size: 1rem;
 }
 .aside {
-    width: 220px;
+    width: 177px;
     float: left;
     height: 80%;
+    margin-top:30px;
 }
 .lnb {
-    border: 1px solid #d8d8d8;
+    
     height: 100%;
     
 }
@@ -10543,19 +10546,16 @@ ul, ol {
     padding-left:0px; /* 들여쓰기 없애기 */
 }
 .lnb > li {
-    border-bottom: 1px solid #d8d8d8;
+    border: 1px solid #d8d8d8;
     background: #fff;
     height: 25%;
-    width: 100%;
+    width: 74%;
     text-align: center;
     padding: 25%;
 }
 .snack_container{
-	margin:20px 30%;
-	width:800px;
-	height:700px;
 	position:relative;
-	border: 1px solid grey;
+	margin: 10px 100px!important;
 }
 .snack_container h3 {
 	text-align:center;
@@ -10571,13 +10571,11 @@ ul, ol {
 }
 .menu_1{
 	width:800px;
-	height:100px;
 }
 .menu_detail{
-	width:400px;
+	width:459px;
 	font-size:12px;
 	float:left;
-	
 }
 .menu_detail td {
 	padding:11.5px!important;
@@ -10587,6 +10585,9 @@ ul, ol {
 	width:50px;
 	text-align: center;
 	margin-top:6%;
+}
+.item_con{
+	margin-top:30px;
 }
 
 /* 테이블 style */
@@ -10603,9 +10604,10 @@ th, td {
   text-align: center;
 }
 
-tr:nth-child(even) {
-   background-color: #f2f2f2; 
-}
+/*테이블 두번째 열 색 넣기  */
+/* tr:nth-child(even) {
+   background-color: #ffffff; 
+} */
 
 /* snacklist */
 .btn_delete {
@@ -10629,20 +10631,7 @@ tr:nth-child(even) {
     text-align: center;
     
 }
-.btn_con{
-	margin-bottom:10px;
-	/* position:absolute; */ 
-	bottom:0px;
-	/* right:20px; */
-}
-.tb_button_left{
-	margin:10px;
-	float:right;
-}
-.tb_button_right{
-	margin:10px;
-	float:right;
-}
+
 .menu_detail span{
 	background:#d1e09e;
 }
@@ -10751,22 +10740,20 @@ tr:nth-child(even) {
 .tb_page em{font-style:normal;}
 .tb_page .division{color:#d2d8e0;}
 .tb_bottom{position:relative; min-height:73px;}
-.tb_button_left{position:absolute; left:0; top:18px; font-size:0;}
-.tb_button_right{position:absolute; right:0; top:18px; font-size:0;}
+.tb_button_left{position:relative; left:0; top:18px; font-size:0; margin:10px;	float:right;}
+.tb_button_right{position:relative; right:0; top:18px; font-size:0; margin:10px;	float:right;}
 .tb_button_center{padding-top: 18px; font-size:0;text-align: center;}
-
+.btn_con{position:absolute; margin-left: 575px;}
+.btn_cont{position: relative; margin-right: 10px; float: right;}
 /* 회원가입 페이지 */
 
 
 
+/*====================================================
 
-
-
-
-
-
-
-/* 로그인 페이지 */
+													로그인 페이지
+													
+====================================================*/
 
 .input-group {
     position: relative;
@@ -10836,7 +10823,7 @@ input[type="password" i] {
     border-top-left-radius: 0;
 }
 
-/* 로그인 */
+
 .login-text {
     color: lightgrey;
     font-size: 1.5rem;
@@ -10848,7 +10835,35 @@ input[type="password" i] {
 .input_field{
 	text-align:center;
 }
-/* 회원가입 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*====================================================
+
+													회원가입 페이지
+													
+====================================================*/
+
 .input_field > input{
 	width:70%;
 	margin-top:10px;
@@ -10865,8 +10880,25 @@ input[type="password" i] {
     vertical-align: top;
 }
 #navi {
-    height: 23px;
+    height: 44px;
     border-bottom: 1px solid #d2d8e0;
+}
+
+#navi ul li a {
+    display: block;
+    float: left;
+    padding: 15px 20px 14px 15px;
+    font-size: 13px;
+    font-weight: 400;
+    color: #4f5f6f;
+}
+#navi ul li strong {
+    display: block;
+    float: left;
+    padding: 15px 20px 14px 15px;
+    font-size: 13px;
+    font-weight: 400;
+    color: #4f5f6f;
 }
 #navi ul li.home {
     min-width: auto;
@@ -10886,6 +10918,11 @@ input[type="password" i] {
 }
 .t_header {
     overflow: hidden;
+    position: relative;
+    left: -245px;
+}
+.snack_container .t_header{
+	border-bottom: 3px solid #628abd;
 }
 .search_table {
     position: relative;
@@ -10938,8 +10975,18 @@ input[type="password" i] {
     text-align: center;
     vertical-align: middle;
 }
+/*====================================================
+
+													스낵관리 페이지
+													
+====================================================*/
 
 
-
-
-
+.card_con img{
+	width: 100px;
+    height: 100px;
+    float: left;
+}
+.card_con{
+	position:relative;
+}

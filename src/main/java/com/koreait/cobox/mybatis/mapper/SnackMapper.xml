@@ -38,10 +38,64 @@
 	topcategory_id = #{topcategory_id}
 </select>
 
+<!-- 체크한 스낵 정보 삭제 -->
+<delete id = "deleteCheckSnack" parameterType="hashMap">
+	delete 
+		from snack
+		where snack_id in
+		<foreach collection="seqs" item="seq" index="index" open="(" close=")" separator=",">
+			#{seq}
+		</foreach>
+</delete>
 
+<!-- 스낵 품절 여부 -->
+<update id="updateSnack" parameterType="hashmap">
+	update cobox.snack
+		set 
+	amount = 0,
+	used_fl = #{used_fl}
+	where snack_id = #{snack_id}
+</update>
 
+<!-- 스낵 구매시 판매수량 insert -->
+<insert id="insertSnackStat" parameterType="Snack_stat">
+	insert into cobox.snack_stat(
+		snack_id
+		,sales_amount
+	)
+	select
+		#{snack_id}
+		,#{sales_amount}
+	where not exists (
+		select snack_id from cobox.snack_stat
+		where snack_id = #{snack_id}
+	)
+</insert>
 
+<!-- 스낵 구매시 판매수량 update -->
+<update id="updateSnackCnt" parameterType="Snack_stat" >
+	update snack_stat 
+	set sales_amount = (
+		select 
+			sales_amount + #{sales_amount} 
+			from 
+			(select sales_amount
+			from cobox.snack_stat a
+			where snack_id = #{snack_id}) as a
+	)
+	where snack_id = #{snack_id}
+</update>
 
+<!-- 스낵 통계 -->
+<select id="selectSnackStat" resultType="map">
+	select
+		topcategory_id as topcategory_id,
+		count(*) as count
+	from cobox.snack as a
+		inner join cobox.snack_stat as b
+		on a.snack_id =b.snack_id 
+		group by topcategory_id 
+</select>
 
 
 </mapper>

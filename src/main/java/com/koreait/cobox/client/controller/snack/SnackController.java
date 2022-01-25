@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -28,8 +29,17 @@ public class SnackController {
 	@Autowired
 	private SnackService snackService;
 	
-	
-	//영화 한건 가져오기
+	/**
+	 * 
+	 * @MethodName : getSnackAll
+	 * @Author : Suyeon Kim
+	 * @Date : 2022. 01. 07.
+	 * @Description : 스낵 리스트 가져오기
+	 * @param request
+	 * @param model
+	 * @param session
+	 * @return
+	 */
 	@RequestMapping(value="/client/snack/snackList", method=RequestMethod.POST)
 	public @ResponseBody HashMap<Object,Object> getSnackAll(HttpServletRequest request, ModelMap model,HttpSession session){
 		
@@ -39,6 +49,101 @@ public class SnackController {
 	    model.addAttribute("snackList",snackAllList);
 		
 	    return resultMap;
+	}
+	
+	/**
+	 * 
+	 * @MethodName : getSnackAll
+	 * @Author : Suyeon Kim
+	 * @Date : 2022. 01. 07.
+	 * @Description : 품절 여부 
+	 * @param request
+	 * @param model
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping(value="/admin/snack/soldout",method=RequestMethod.POST)
+	public @ResponseBody String updateSnackused(@RequestParam(value = "snack_id", required = false, defaultValue = "") int snack_id,
+			@RequestParam(value = "used_fl", required = false, defaultValue = "") String used_fl,
+			HttpServletRequest request, HttpServletResponse response, ModelMap model, HttpSession session
+			){
+		
+		HashMap<Object,Object> params = new HashMap<Object,Object>();
+		
+			params.put("snack_id", snack_id);
+			params.put("used_fl", used_fl);
+			
+			int result = 0;
+			
+			try {
+				result = snackService.updateSnackused(params);
+				System.out.println(result);
+				if(result > 0 ) {
+					return "true";
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+		return "false";
+	}
+	
+	
+	/**
+	 * 
+	 * @MethodName : insertSnackStat
+	 * @Author : Suyeon Kim
+	 * @Date : 2022. 01. 07.
+	 * @Description : 스낵 통계 insert
+	 * @param request
+	 * @param model
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping(value="/client/snack/insertSnackStat",method=RequestMethod.POST)
+	public @ResponseBody int insertSnackStat(@RequestParam(value = "snack_id", required = false, defaultValue = "") int snack_id,
+			@RequestParam(value = "sales_amount", required = false, defaultValue = "") int sales_amount,
+			HttpServletRequest request, HttpServletResponse response, ModelMap model, HttpSession session
+			){
+			System.out.println("snack_id : " + snack_id);
+			System.out.println("sales_amount : " + sales_amount);
+			
+			HashMap<Object,Object> params = new HashMap<Object,Object>();
+			params.put("snack_id", snack_id);
+			params.put("sales_amount", sales_amount);
+			int result = 0;
+			result = snackService.insertSnackStat(params);
+			
+			return result;
+	}
+	
+	
+	/**
+	 * 
+	 * @MethodName : updateSnackCnt
+	 * @Author : Suyeon Kim
+	 * @Date : 2022. 01. 07.
+	 * @Description : 스낵 판매량 update
+	 * @param request
+	 * @param model
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping(value="/client/snack/updateSnackCnt",method=RequestMethod.POST)
+	public @ResponseBody int updateSnackCnt(@RequestParam(value = "snack_id", required = false, defaultValue = "") int snack_id,
+			@RequestParam(value = "sales_amount", required = false, defaultValue = "") int sales_amount,
+			HttpServletRequest request, HttpServletResponse response, ModelMap model, HttpSession session){
+	
+			HashMap<Object,Object> params = new HashMap<Object,Object>();
+			params.put("snack_id", snack_id);
+			params.put("sales_amount", sales_amount);
+		
+			int result = 0;
+			result = snackService.updateSnackCnt(params);
+			
+			return result ;
+		
+
 	}
 	
 	

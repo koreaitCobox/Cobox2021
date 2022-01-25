@@ -8,5 +8,6 @@ public interface CommentsService {
 	public List selectAll(int movie_id);
 	public int insert(Comments comments);
 	public int delete(int comments_id);
+	public int deleteComment(int comments_id);
 
 }

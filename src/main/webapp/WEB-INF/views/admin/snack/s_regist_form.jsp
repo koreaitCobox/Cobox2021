@@ -8,11 +8,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link type="text/css" rel="stylesheet" href="/resources/css/style.css">
+<link type="text/css" rel="stylesheet" href="/resources/css/common.css">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <%@ include file="../inc/header.jsp"%>
 <style>
 input[type=text], select, textarea {
-	width: 100%;
+	width: 34em!important;
 	padding: 12px;
 	border: 1px solid #ccc;
 	border-radius: 4px;
@@ -20,9 +22,11 @@ input[type=text], select, textarea {
 	margin-top: 6px;
 	margin-bottom: 16px;
 	resize: vertical;
+	margin-left: 6px;
 }
 
 input[type=button] {
+	
 	background-color: #4CAF50;
 	color: white;
 	padding: 12px 20px;
@@ -39,12 +43,11 @@ input[type=button]:hover {
 	border-radius: 5px;
 	border: 1px solid black;
 	padding: 20px;
-	width:50%;
-	display:inline-block;
+	display:contents;
 	
 }
 .basic_table{
-	text-align:center;
+	padding:30px 30px 78px 30px; 
 }
 
 
@@ -77,7 +80,14 @@ input[type=button]:hover {
 }
 #add{font-size:15px;}
 #minus{font-size:15px;}
-
+.t_header{
+	overflow: hidden;
+    position: relative;
+    left:0 !important;
+}
+form p{
+	margin:10px;
+}
 </style>
 <!-- 달력 -->
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
@@ -139,11 +149,22 @@ function regist(){
 
 <body>
 	<%@ include file="../inc/main_navi.jsp"%>
+		<nav id="navi">
+				<ul>
+					<li class="home"><a href="/admin/movie/list"><img
+							src="/resources/images/common/ico_home.png" alt="네비 아이콘"></a></li>
+					<li><a href="#">스낵관리</a></li>
+					<li><strong>스낵 등록</strong></li>
+				</ul>
+		</nav>
 	<div class="basic_table">
-		<h3>스낵 등록</h3>
+			<div class="t_header">
+				<h3>스낵 등록</h3>
+			</div>
 		<div class="container">
 			<form>
-				<h4>스낵 분류</h4>
+				<p>
+				<span>스낵 분류</span>
 				<select id="snack_id" name="topcategory_id">		
 					<option >스낵 분류 선택</option>
 					<option value="1">팝콘</option>
@@ -151,13 +172,18 @@ function regist(){
 					<option value="3">스낵</option>
 					<option value="4">음료</option>
 				</select>
-	
-				<input type="text"  id="snack_name" name="snack_name" placeholder="스낵명"> 
-				<input type="text"  id="snack_price" name="price" placeholder="가격">
-				<input type="text"  name="amount" id="amount" placeholder="수량(재고)" >
+				<p>
+				<span>스낵 이름</span>
+					<input type="text"  id="snack_name" name="snack_name" placeholder="스낵명"><br>
+				<span> 스낵 가격</span>	 
+					<input type="text"  id="snack_price" name="price" placeholder="가격">
+				<p>
+				<span>수량(재고)</span>	
+					<input type="text"  name="amount" id="amount" placeholder="수량(재고)" >
+				<p>
 				<!-- <input type="button"  id="add" value='+' onclick = 'count("add")'>
 				<input type="button"  id="minus" value='-' onclick = 'count("minus")' > -->
-
+				
 				 <h4>스낵 설명</h4>
 				<textarea id="detail" name="detail"  style="height: 200px"></textarea>
 	
@@ -168,7 +194,6 @@ function regist(){
 	
 				<input type="button" value="스낵등록" onClick="regist()" id="registBtn"> 
 				<input type="button" value="목록보기" onClick="location.href='/admin/snack/list'">
-				
 			</form>
 		</div>
 	</div>

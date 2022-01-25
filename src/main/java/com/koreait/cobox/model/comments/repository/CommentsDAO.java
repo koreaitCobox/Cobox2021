@@ -8,5 +8,6 @@ public interface CommentsDAO {
 	public List selectAll(int movie_id);
 	public int insert(Comments comments);
 	public int delete(int movie_id);
+	public int deleteComment(int comments_id);
 	
 }

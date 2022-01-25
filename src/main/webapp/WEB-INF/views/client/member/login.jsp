@@ -174,11 +174,7 @@ input[type=submit]:hover {
 $(document).ready(function() {
 	//카카오 로그인 키 삽입	
 	Kakao.init('c89a17aca474ee70198a2cac61fe14e5');
-	console.log(Kakao.isInitialized());
-	
-	
-
-	
+	console.log(Kakao.isInitialized());	
 });
 	
 function requestLogin() {

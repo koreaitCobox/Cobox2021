@@ -12,7 +12,14 @@ public class Snack {
 	private String detail;
 	private String filename;
 	private int sales_amount;
+	private String used_fl;
 	
+	public String getUsed_fl() {
+		return used_fl;
+	}
+	public void setUsed_fl(String used_fl) {
+		this.used_fl = used_fl;
+	}
 	public int getSales_amount() {
 		return sales_amount;
 	}

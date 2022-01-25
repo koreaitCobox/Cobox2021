@@ -15,5 +15,13 @@ public interface SnackService {
 	//스낵 분류 리스트 가져오기
 	public List<Snack> selectById(int topcategory_id);
 	//체크된 스낵 삭제하기
-	int deleteCheck(FileManager fileManager, HashMap<Object,Object>hashMap);
+	int deleteCheck(HashMap<Object,Object>hashMap);
+	//스낵 사용 여부 
+	public int updateSnackused(HashMap<Object,Object> params);
+	//스낵 통계
+	public int insertSnackStat(HashMap<Object,Object>params);
+	//스낵 통계 update
+	public int updateSnackCnt(HashMap<Object,Object>params);
+	//스낵 통계 가져오기 
+	public List selectSnackStat();
 }

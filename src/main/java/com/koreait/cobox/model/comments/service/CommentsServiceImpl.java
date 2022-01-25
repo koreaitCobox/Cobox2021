@@ -29,4 +29,10 @@ public class CommentsServiceImpl implements CommentsService {
 		return 0;
 	}
 
+	@Override
+	public int deleteComment(int comments_id) {
+		
+		return commentsDAO.deleteComment(comments_id);
+	}
+
 }
